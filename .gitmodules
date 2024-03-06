@@ -1,0 +1,9 @@
+[submodule "sqlite/auroravfs"]
+	path = sqlite/auroravfs
+	url = git@github.com:etsal/sqlite-aurora.git
+[submodule "sqlite/tatp"]
+	path = sqlite/tatp
+	url = git@github.com:etsal/sqlite-tatp.git
+[submodule "sqlite/sqlite"]
+	path = sqlite/sqlite
+	url = https://github.com/sqlite/sqlite.git
