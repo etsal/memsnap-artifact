@@ -78,7 +78,7 @@ sqlite_walsize()
 
 #==============MAIN==============
 
-NAME=$1
+NAME="artifact"
 sqliteutil_preamble
 
 gstripe create $CKPTSTRIPE $CKPTDISKS
