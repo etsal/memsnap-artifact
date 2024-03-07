@@ -47,3 +47,8 @@ microbench/wal
 vm-microbench/vmobject
 *.pdf
 __pycache__
+
+sqlite/graphs/fillrandbatch
+sqlite/graphs/fillseqbatch
+sqlite/graphs/pgfs
+sqlite/graphs/tatp
