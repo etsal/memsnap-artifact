@@ -10,3 +10,12 @@
 [submodule "FlameGraph"]
 	path = FlameGraph
 	url = https://github.com/brendangregg/FlameGraph.git
+[submodule "aurora-memsnap"]
+	path = aurora-memsnap
+	url = https://github.com/etsal/aurora.git
+	branch = memsnap
+[submodule "aurora-original"]
+	path = aurora-original
+	url = https://github.com/etsal/aurora.git
+	branch = original
+
