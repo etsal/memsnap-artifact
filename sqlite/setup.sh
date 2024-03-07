@@ -57,9 +57,6 @@ compile_tatp()
 
 #===========MAIN===========
 
-git clone https://github.com/sqlite/sqlite.git --depth 1 --branch="branch-3.41" sqlite
-git clone https://github.com/etsal/AuroraVFS.git auroravfs
-git clone https://github.com/etsal/sqlite-tatp.git tatp
 THRS=`sysctl hw.ncpu | awk -F ' ' '{print $2}'`
 
 # Compile everything
