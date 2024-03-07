@@ -4,6 +4,9 @@
 [submodule "sqlite/tatp"]
 	path = sqlite/tatp
 	url = git@github.com:etsal/sqlite-tatp.git
+[submodule "sqlite/db_bench"]
+	path = sqlite/db_bench
+	url = https://github.com/etsal/sqlite-bench.git
 [submodule "sqlite/sqlite"]
 	path = sqlite/sqlite
 	url = https://github.com/sqlite/sqlite.git
@@ -18,4 +21,3 @@
 	path = aurora-original
 	url = https://github.com/etsal/aurora.git
 	branch = original
-
