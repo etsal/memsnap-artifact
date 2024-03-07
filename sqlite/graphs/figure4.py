@@ -22,7 +22,7 @@ def report_metrics(keys, basenums, slsnums):
     for i , (label, color, vals) in enumerate([("baseline", "orange", basenums), ("memsnap", "blue", slsnums)]):
         offset = width * i
         rects = ax.bar(x + offset, vals, width, label=label, color=color)
-        ax.bar_label(rects, padding = 3)
+        #ax.bar_label(rects, padding = 3)
 
     ax.set(ylabel="Total Transactions")
     ax.set(xlabel="Number of Records")
@@ -35,7 +35,7 @@ def report_metrics(keys, basenums, slsnums):
 
     fig.set_size_inches(3.6, 2.4)
     fig.tight_layout()
-    fig.savefig(Path.cwd() / "pgfs" / "eval-sqlite-tatp.pgf")
+    fig.savefig(Path.cwd() / "pgfs" / "figure4.png")
 
 def fill_config(datadir, name):
     config = dict()
