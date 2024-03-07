@@ -7,3 +7,6 @@
 [submodule "sqlite/sqlite"]
 	path = sqlite/sqlite
 	url = https://github.com/sqlite/sqlite.git
+[submodule "FlameGraph"]
+	path = FlameGraph
+	url = https://github.com/brendangregg/FlameGraph.git
