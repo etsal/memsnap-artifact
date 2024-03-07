@@ -82,8 +82,7 @@ NAME=$1
 sqliteutil_preamble
 
 gstripe create $CKPTSTRIPE $CKPTDISKS
-for BATCH_SIZE in 1 4 16 64 256; do
-#for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
+for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
     for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
 	    sqliteutil_aursetup "sls"
 	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" "YES" 
@@ -92,8 +91,7 @@ for BATCH_SIZE in 1 4 16 64 256; do
 done
 gstripe destroy $CKPTSTRIPE
 
-for BATCH_SIZE in 1 4 16 64 256; do
-#for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
+for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
     for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
 	    sqliteutil_setup_zfs
 	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" ""
