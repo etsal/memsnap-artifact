@@ -28,7 +28,6 @@ util_check_binary()
     fi
 }
 
-
 check_completed()
 {
 	if [ -f $1 ]; then
@@ -48,9 +47,11 @@ util_setup_root()
 
 	echo "[Aurora `date +'%T'`] Creating the root and installing packages"
 	MNT=$FSMNT installroot
-#	cp /etc/resolv.conf $FSMNT/etc/resolv.conf
-#	cp -r packages $FSMNT/packages
-#	chroot $FSMNT /bin/sh -c 'ASSUME_ALWAYS_YES=yes pkg add /packages/*'
+	cp /etc/resolv.conf $FSMNT/etc/resolv.conf
+	mkdir -p $MNT/packages
+	cp -r packages $FSMNT/packages/Latest
+	chroot $FSMNT /bin/sh -c 'env PACKAGESITE=file:/packages pkg bootstrap -y'
+	chroot $FSMNT /bin/sh -c 'IGNORE_OSVERSION=yes ASSUME_ALWAYS_YES=yes pkg add /packages/Latest/*.pkg'
 
 	echo "[Aurora `date +'%T'`] Copying over necessary files"
 	mkdir -p $FSMNT/usr/lib/debug/boot/modules >/dev/null
