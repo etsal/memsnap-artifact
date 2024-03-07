@@ -181,7 +181,7 @@ sqliteutil_epilogue()
 
 	# Move the benchmarks from their temporary 
 	# to their permanent location
-	mv "$OUT/sqlite" "$OUT/sqlite-$NAME-`date "+%m-%d,%H:%M:%S"`"
+	mv "$OUT/sqlite" "$OUT/sqlite-$NAME"
 
 	echo "[Aurora `date +'%T'`] Tests done"
 }
