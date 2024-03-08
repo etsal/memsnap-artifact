@@ -60,6 +60,9 @@ sqliteutil_runbenchmark()
 	util_stop_pmcstat >> $LOG 2>> $LOG
 
 	BATCH_SIZE=`echo $CONFIG | cut -d "-" -f 3`
+	if [ -z $BATCH_SIZE ]; then
+		BATCH_SIZE=0
+	fi
 	if [ $BATCH_SIZE == 8 ]; then
 		util_process_pmcstat $GMONDIR $PMCFILE $PMCTXT $PMCGRAPH $PMCSTACK> $LOG 2> $LOG
 	fi
