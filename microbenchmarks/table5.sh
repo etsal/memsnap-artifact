@@ -9,7 +9,7 @@ sleep 1
 sysctl aurora.objprotect=1 >/dev/null 2>/dev/null
 sysctl aurora.tracebuf=1 >/dev/null 2>/dev/null
 
-./sas.d &
+./sastrack.d &
 sleep 1
 ./sastrack $SIZE >/dev/null 2>/dev/null
 pkill dtrace
