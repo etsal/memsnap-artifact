@@ -9,6 +9,28 @@ import os
 import subprocess
 import sys
 
+<<<<<<< HEAD
+=======
+prelude=r"""
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\begin{document}
+\begin{table}[!tb]
+\resizebox{\columnwidth}{!}{
+"""
+
+epilogue=r"""
+}
+\end{table}
+
+\end{document}
+"""
+
+
+>>>>>>> 70c5b8c (add table 8)
 base_syscalls = [ "0x22000", "kern_fsync", "sys_write", "sys_read" ]
 sls_syscalls = [ "0x22000", "slsckpt_dataregion", "slsckpt_dataregion_dump", "vm_fault" ]
 
@@ -59,15 +81,26 @@ def pmcstat(bench):
         slsline(descriptions[slsname], slspoints[slsname])
 
 def header():
+<<<<<<< HEAD
     print(r"\begin{tabular}{@{} l r l r @{}}")
     print(r"\toprule")
     print(r"{\bf Baseline} &{\bf \%CPU} &{\bf \NAME}  &{\bf \%CPU}\\")
+=======
+    print(prelude)
+    print(r"\begin{tabular}{@{} l r l r @{}}")
+    print(r"\toprule")
+    print(r"{\bf Baseline} &{\bf \%CPU} &{\bf MemSnap}  &{\bf \%CPU}\\")
+>>>>>>> 70c5b8c (add table 8)
     print(r"\midrule")
 
 
 def footer():
     print(r"\bottomrule")
     print(r"\end{tabular}")
+<<<<<<< HEAD
+=======
+    print(epilogue)
+>>>>>>> 70c5b8c (add table 8)
 
 
 if __name__ == "__main__":
