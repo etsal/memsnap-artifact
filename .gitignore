@@ -33,13 +33,15 @@ persistence-benchmarks/sqlite/data
 persistence-benchmarks/rocksdb/data
 persistence-benchmarks/postgres/data
 
-microbench/checkpoint
-microbench/delta
-microbench/directio
-microbench/memsnap
-microbench/multimemsnap
-microbench/multisas
-microbench/wal
+microbenchmarks/checkpoint
+microbenchmarks/delta
+microbenchmarks/directio
+microbenchmarks/memsnap
+microbenchmarks/multimemsnap
+microbenchmarks/multisas
+microbenchmarks/old
+microbenchmarks/sastrack
+microbenchmarks/wal
 
 **/*.swp
 **/appendonlydir
@@ -52,3 +54,4 @@ sqlite/graphs/fillrandbatch
 sqlite/graphs/fillseqbatch
 sqlite/graphs/pgfs
 sqlite/graphs/tatp
+
