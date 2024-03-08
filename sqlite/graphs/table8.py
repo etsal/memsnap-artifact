@@ -9,8 +9,6 @@ import os
 import subprocess
 import sys
 
-<<<<<<< HEAD
-=======
 prelude=r"""
 \documentclass{article}
 \usepackage{booktabs}
@@ -30,9 +28,8 @@ epilogue=r"""
 """
 
 
->>>>>>> 70c5b8c (add table 8)
 base_syscalls = [ "0x22000", "kern_fsync", "sys_write", "sys_read" ]
-sls_syscalls = [ "0x22000", "slsckpt_dataregion", "slsckpt_dataregion_dump", "vm_fault" ]
+sls_syscalls = [ "0x22000", "slsfs_sas_trace_commit", "slsfs_sas_trace_commit_write", "vm_fault" ]
 
 descriptions = {
     "sys_write" : "write",
@@ -40,8 +37,8 @@ descriptions = {
     "kern_fsync" : "fsync",
     "0x22000" : "userspace",
     "vm_fault" : "page faults",
-    "slsckpt_dataregion_dump" : "memsnap flush",
-    "slsckpt_dataregion" : "memsnap",
+    "slsfs_sas_trace_commit" : "memsnap",
+    "slsfs_sas_trace_commit_write" : "memsnap flush",
 }
 
 configs = {
@@ -81,26 +78,17 @@ def pmcstat(bench):
         slsline(descriptions[slsname], slspoints[slsname])
 
 def header():
-<<<<<<< HEAD
-    print(r"\begin{tabular}{@{} l r l r @{}}")
-    print(r"\toprule")
-    print(r"{\bf Baseline} &{\bf \%CPU} &{\bf \NAME}  &{\bf \%CPU}\\")
-=======
     print(prelude)
     print(r"\begin{tabular}{@{} l r l r @{}}")
     print(r"\toprule")
     print(r"{\bf Baseline} &{\bf \%CPU} &{\bf MemSnap}  &{\bf \%CPU}\\")
->>>>>>> 70c5b8c (add table 8)
     print(r"\midrule")
 
 
 def footer():
     print(r"\bottomrule")
     print(r"\end{tabular}")
-<<<<<<< HEAD
-=======
     print(epilogue)
->>>>>>> 70c5b8c (add table 8)
 
 
 if __name__ == "__main__":

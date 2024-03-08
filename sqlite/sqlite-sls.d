@@ -3,17 +3,17 @@
 #pragma D option quiet
 int memsnap_start;
 
-fbt::slsckpt_dataregion:entry
+fbt::slsfs_sas_trace_commit:entry
 /pid == $1/
 {
-    memsnap_start = timestamp;
+    self->start = timestamp;
     @tcnt["memsnap-count"] = count()
 }
 
-fbt::slsckpt_dataregion:return
+fbt::slsfs_sas_trace_commit:return
 /pid == $1/
 {
-    @tavg["memsnap"] = avg(timestamp - memsnap_start);
+    @tavg["memsnap"] = avg(timestamp - self->start);
 }
 
 

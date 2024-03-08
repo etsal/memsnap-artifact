@@ -81,8 +81,8 @@ NAME="artifact"
 sqliteutil_preamble
 
 gstripe create $CKPTSTRIPE $CKPTDISKS
-for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
-    for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
+for BATCH_SIZE in 1 16;do
+    for BENCHMARK in "fillseqbatch"; do
 	    sqliteutil_aursetup "sls"
 	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" "YES" 
 	    sqliteutil_aurteardown

@@ -80,7 +80,7 @@ def line(data):
 
 def dtrace(bench):
     data = fill_config(bench)
-    for transaction_size in sorted(list(map(int, data.keys())))[::4]:
+    for transaction_size in sorted(list(map(int, data.keys()))):
         print(r" {} KiB".format((transaction_size) * 4), end="")
         line(data[transaction_size])
 
