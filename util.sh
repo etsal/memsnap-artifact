@@ -275,6 +275,7 @@ util_start_sysctl() {
 	touch $SYSCTLFILE
 	while true; do
 		sysctl aurora >> $SYSCTLFILE
+		sysctl aurora_slos >> $SYSCTLFILE
 		sleep 1
 	done
 }
