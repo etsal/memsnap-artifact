@@ -243,7 +243,8 @@ util_process_pmcstat()
 
 	# Create a deep stack trace file to get an accurate flame graph
 	pmcstat -R $PMCFILE -z100 -G $PMCSTACK
-	~/FlameGraph/stackcollapse-pmc.pl $PMCSTACK | ~/FlameGraph/flamegraph.pl > $PMCGRAPH
+	ln -s /usr/local/bin/perl /usr/bin/perl >/dev/null 2>/dev/null
+	../FlameGraph/stackcollapse-pmc.pl $PMCSTACK | ../FlameGraph/flamegraph.pl > $PMCGRAPH
 	rm -r $PMCSTACK
 
 	# Get a less deep file for stack tracing
