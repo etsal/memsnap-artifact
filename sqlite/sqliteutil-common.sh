@@ -24,15 +24,16 @@ sqliteutil_runbenchmark()
 	echo "[Aurora `date +'%T'`] Running sqlite: $CONFIG, Iteration $ITER"
 
 	PMCID="$NAME.$ITER"
-	PMCFILE="$DIR/sample.$PMCID.out"
-	GMONDIR="$DIR/sample.gmon"
 	DTRACEOUT="$DIR/dtrace.$ITER"
-	PMCTXT="$DIR/pmc.$ITER"
-	PMCSTACK="$DIR/stackpmc.$ITER"
-	PMCGRAPH="$DIR/flamegraph.$ITER.svg"
+	PMCFILE="$DIR/sample.$PMCID.out"
 	IDFILE="$DIR/$NAME.$ITER.done"
 	SYSCTLFILE="$DIR/sysctl.$ITER"
 	RUFILE="$DIR/rusage.$ITER"
+
+	PMCSTACK="$DIR/stackpmc.$ITER"
+	PMCGRAPH="$DIR/flamegraph.$ITER.svg"
+	PMCTXT="$DIR/pmc.$ITER"
+	GMONDIR="$DIR/sample.gmon"
 
 	chroot $MNT /bin/sh -c "$CMD" &
 	FUNC_PID="$!"
@@ -57,7 +58,11 @@ sqliteutil_runbenchmark()
 	util_stop_rusage $RUPID >> $LOG 2>> $LOG
 	util_stop_dtrace >> $LOG 2>> $LOG
 	util_stop_pmcstat >> $LOG 2>> $LOG
-	util_process_pmcstat $GMONDIR $PMCFILE $PMCTXT $PMCGRAPH $PMCSTACK> $LOG 2> $LOG
+
+	BATCH_SIZE=`echo $CONFIG | cut -d "-" -f 3`
+	if [ $BATCH_SIZE == 8 ]; then
+		util_process_pmcstat $GMONDIR $PMCFILE $PMCTXT $PMCGRAPH $PMCSTACK> $LOG 2> $LOG
+	fi
 
 	mv "$FSMNT/$TMP" $OUTFILE > $LOG 2> $LOG
 	fsync $OUTFILE
