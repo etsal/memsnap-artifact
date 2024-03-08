@@ -16,7 +16,6 @@ sqlite_slsdb_teardown()
     DIR=$1
     ITER=$2
     
-    slsctl partdel -o $OID
     mv $MNT/tmp/raw $DIR/raw.$ITER 
 }
 
@@ -82,9 +81,7 @@ NAME="artifact"
 sqliteutil_preamble
 
 gstripe create $CKPTSTRIPE $CKPTDISKS
-#for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
-#    for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
-for BATCH_SIZE in 16 ; do
+for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
     for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
 	    sqliteutil_aursetup "sls"
 	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" "YES" 
@@ -93,12 +90,12 @@ for BATCH_SIZE in 16 ; do
 done
 gstripe destroy $CKPTSTRIPE
 
-#for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
-#    for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
-#	    sqliteutil_setup_zfs
-#	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" ""
-#	    sqliteutil_teardown_zfs
-#    done
-#done
+for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
+    for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
+	    sqliteutil_setup_zfs
+	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" ""
+	    sqliteutil_teardown_zfs
+    done
+done
 
 sqliteutil_epilogue "batch-$NAME"
