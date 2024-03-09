@@ -60,7 +60,8 @@ compile_tatp()
 THRS=`sysctl hw.ncpu | awk -F ' ' '{print $2}'`
 
 # Compile everything
+mkdir graphs/pgfs
 compile_libsqlite $THRS
 compile_auroravfs $THRS
 compile_db_bench $THRS
-#compile_tatp $THRS
+compile_tatp $THRS
