@@ -1,7 +1,7 @@
 #!/usr/sbin/dtrace -s
 
 #pragma D option quiet
-int tsstart, tsenter, tscow, tsend;
+int tsstart, tsenter, tscow, tswrite, tswait, tsend;
 
 fbt::slsckpt_dataregion:entry
 {
@@ -20,19 +20,41 @@ sls:::cow
     @tavg["shadow creation"] = avg(tscow - tsenter);
 }
 
-sls:::wait
+sls:::write
 {
     tswrite = timestamp;
-    @tavg["write IO"] = avg(tswrite - tscow);
+    @tavg["creating IO "] = avg(tswrite - tscow);
+}
+
+sls:::wait
+{
+    tswait = timestamp;
+    @tavg["write IO"] = avg(tswrite - tswrite);
 }
 
 sls:::cleanup
 {
-    tswrite = timestamp;
-    @tavg["shadow collapse"] = avg(tswrite - tscow);
-    @tavg["Total"] = avg(tswrite - tsenter);
+    tsend = timestamp;
+    @tavg["shadow collapse"] = avg(tsend - tswait);
+    @tavg["Total"] = avg(tsend - tsenter);
 }
 
+fbt::sls_memsnap:entry
+{
+	self->msnp = timestamp;
+
+}
+
+sls:::enter
+{
+    @tavg["before dataregion"] = avg(timestamp - self->msnp);
+}
+
+fbt::sls_memsnap:return
+{
+    	@tavg["memsnap"] = avg(timestamp - self->msnp);
+
+}
 END
 {
     printa(@tavg);
