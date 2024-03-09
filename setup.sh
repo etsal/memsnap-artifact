@@ -13,13 +13,14 @@ git submodule update --init sqlite/tatp
 cp -r packages /packages
 
 # Set up local variables required for installation and benchmarking
-echo "export IGNORE_OSVERSION=\"yes\"" >> .profile
+mkdir /testmnt
+echo "export MNT=/testmnt" >> ~/.profile
+echo "export IGNORE_OSVERSION=\"yes\"" >> ~/.profile
 
 env PACKAGESITE=file:/packages pkg bootstrap
 pkg add /packages/Latest/bash-5.2.15.pkg
 chsh -s "/usr/local/bin/bash"
 
-echo "export MNT=/testmnt" >> .profile
 
 for p in `ls /packages/Latest/*.pkg`; 
 	do pkg add $p; 
@@ -29,23 +30,17 @@ done
 rm /usr/lib/dtrace/psinfo.d
 rm /usr/lib/dtrace/ip.d
 
-git clone git@github.com:rcslab/aurora-12.3.git
-rmdir /usr/src; mv aurora-12.3 /usr/src
+# Set up bootloader options
+mv loader.conf /boot/loader.conf
 
 # Get a base root, required by the benchmarks
 wget https://rcs.uwaterloo.ca/~etsal/base.txz
 mkdir -p /usr/freebsd-dist
 mv base.txz /usr/freebsd-dist
 
-# Set up bootloader options
-mv loader.conf /boot/loader.conf
+git clone https://github.com/rcslab/aurora-12.3.git
+rmdir /usr/src; mv aurora-12.3 /usr/src
 
-# Note: FreeBSD 12.3 has an issue with building that causes a spurious error caused by a missing "opt_global.h".
-# Rerun the above command and eventually it goes away.
 
-cd /usr/src && make -j9 NO_CLEAN=yes buildkernel
-if [ $? -ne 0 ]; then
-	dialog --msgbox "WARNING: Compilation failed because of a FreeBSD 12.3 build bug. In that case, please rerun the compilation command." 5 60
-fi
-
-make NO_CLEAN=yes installkernel
+mkdir -p /usr/lib/debug/boot/modules/
+mkdir -p /usr/aurora/tests/posix/

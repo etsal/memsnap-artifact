@@ -1,12 +1,15 @@
 [submodule "sqlite/auroravfs"]
 	path = sqlite/auroravfs
-	url = git@github.com:etsal/sqlite-aurora.git
+	url = https://github.com/etsal/sqlite-aurora.git
+	branch = master
 [submodule "sqlite/tatp"]
 	path = sqlite/tatp
-	url = git@github.com:etsal/sqlite-tatp.git
+	url = https://github.com/etsal/sqlite-tatp.git
+	branch = main
 [submodule "sqlite/db_bench"]
 	path = sqlite/db_bench
 	url = https://github.com/etsal/sqlite-bench.git
+	branch = master
 [submodule "sqlite/sqlite"]
 	path = sqlite/sqlite
 	url = https://github.com/sqlite/sqlite.git

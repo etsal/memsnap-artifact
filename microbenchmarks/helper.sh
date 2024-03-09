@@ -1,5 +1,5 @@
-ZDISKS="/dev/nvd0 /dev/nvd1"
-SDISKS="nvd0 nvd1"
+ZDISKS="/dev/$DISK1 /dev/$DISK2"
+SDISKS="$DISK1 $DISK2"
 STRIPE="st0"
 SPATH="/dev/stripe/st0"
 ZPOOL="microbench"

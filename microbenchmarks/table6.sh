@@ -10,7 +10,7 @@ for i in 1 2 4 8 16 32 64 128 256 512 1024; do
 	sysctl aurora.tracebuf=1 >/dev/null 2>/dev/null
 
 	ginit
-	./directio $(( i * 4096 )) 
+	./directio $(( i * 4096 )) $DISK
 	gfini
 
 	printf " & "

@@ -7,8 +7,8 @@
 
 #include "helper.h"
 
+#define NAME ("/dev/stripe/st0")
 #define ITERATIONS (1000)
-#define DISK ("/dev/stripe/st0")
 
 int
 main(int argc, char *argv[])
@@ -36,7 +36,7 @@ main(int argc, char *argv[])
 		return (-1);
 	}
 
-	fd = open(DISK, O_RDWR);
+	fd = open(NAME, O_RDWR);
 	if (fd < 0) {
 		perror("open");
 		return (-1);
