@@ -51,8 +51,8 @@ create_mapping(char *name, void **mappingp)
 int
 main(int argc, char **argv)
 {
-	struct timeval tstart, tend;
-	size_t ckpt_size, sync_time;
+	size_t ckpt_size, sync_time = 0;
+	struct timespec tstart, tend;
 	uint64_t nextepoch;
 	size_t total_time;
 	size_t time;
@@ -91,11 +91,11 @@ main(int argc, char **argv)
 			memset(&db[off], rand(), PAGE_SIZE);
 		}
 
-		gettimeofday(&tstart, NULL);
+		clock_gettime(CLOCK_REALTIME_PRECISE, &tstart);
 		sas_trace_commit(fd);
-		gettimeofday(&tend, NULL);
+		clock_gettime(CLOCK_REALTIME_PRECISE, &tend);
 
-		sync_time += microtime(&tstart, &tend);
+		sync_time += (nanotime(&tstart, &tend) / 1000);
 	}
 
 	stats(sync_time / ITERATIONS, ckpt_size);

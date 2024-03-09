@@ -37,6 +37,7 @@ microbenchmarks/checkpoint
 microbenchmarks/delta
 microbenchmarks/directio
 microbenchmarks/memsnap
+microbenchmarks/memsnap-old
 microbenchmarks/multimemsnap
 microbenchmarks/multisas
 microbenchmarks/old

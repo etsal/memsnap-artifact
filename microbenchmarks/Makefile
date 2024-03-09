@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-all: checkpoint directio memsnap old sastrack wal
+all: checkpoint directio memsnap memsnap-old old sastrack wal
 
 checkpoint: checkpoint.c
 	clang -g -O2 -lpthread -lsls -o checkpoint checkpoint.c
@@ -13,6 +13,9 @@ memsnap: memsnap.c
 
 old: old.c
 	clang -g -O2 -o old old.c ../aurora-original/libsls/libsls.a
+
+memsnap-old: memsnap-old.c
+	clang -g -O2 -o memsnap-old memsnap-old.c ../aurora-original/libsls/libsls.a
 
 sastrack: sastrack.c
 	clang -g -O2 -lsls -o sastrack sastrack.c

@@ -13,8 +13,8 @@
 int
 main(int argc, char *argv[])
 {
+	size_t transaction_size, sync_time = 0;
 	struct timeval tstart, tend;
-	size_t transaction_size, sync_time;
 	ssize_t ret;
 	int error;
 	char *buf;
