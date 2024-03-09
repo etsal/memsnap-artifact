@@ -11,11 +11,8 @@ matplotlib.use('Agg')
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
-import scienceplots
 import numpy as np
-plt.style.use(['science', 'ieee'])
 matplotlib.rcParams.update({'font.size': 9})
-matplotlib.rcParams.update({'font.family': "serif"})
 matplotlib.rcParams.update({'font.serif': "Times"})
 
 metrics = ["min", "50th", "90th", "99th", "avg", "stddev" ]
