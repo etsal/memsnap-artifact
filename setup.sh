@@ -44,3 +44,5 @@ rmdir /usr/src; mv aurora-12.3 /usr/src
 
 mkdir -p /usr/lib/debug/boot/modules/
 mkdir -p /usr/aurora/tests/posix/
+
+ln -s /usr/local/bin/python3.9 /usr/local/bin/python
