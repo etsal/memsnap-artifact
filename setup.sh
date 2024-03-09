@@ -28,8 +28,8 @@ done
 rm /usr/lib/dtrace/psinfo.d
 rm /usr/lib/dtrace/ip.d
 
-git clone git@github.com:etsal/freebsd-aurora.git
-rmdir /usr/src; mv freebsd-aurora /usr/src
+git clone git@github.com:rcslab/aurora-12.3.git
+rmdir /usr/src; mv aurora-12.3 /usr/src
 
 # Get a base root, required by the benchmarks
 wget https://rcs.uwaterloo.ca/~etsal/base.txz
