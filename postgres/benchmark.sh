@@ -14,7 +14,7 @@ BENCHMARK="tpcc"
 #DE="--enable-dtrace"
 DE=""
 
-ITER=1
+ITER=5
 
 sysctl -f sysctl-opt.sh
 

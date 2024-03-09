@@ -68,3 +68,12 @@ To generate the graphs and tables for the SQLite benchmakrs, go to sqlite/graphs
 - table9.sh: Prints out a table for Table 9 (Performance comparison between MemSnap-RocksDB, Aurora-RocksDB and baseline RocksDB for dbbench)
 - table10.sh: Prints out a table for Table 10, (Latency breakdown and comparison between the MemSnap and Aurora persistence operations under RocksDB). The second column printed out is Table 2.
 
+3) To run PostGreSQL, please go to the postgres/ directory:
+- Run ./setup.sh, this will create the required users (users and postgres) and clone the modified postgres repo required to run the benchmark.
+- Modify the benchmark.sh to the proper disks (default is nvd0 and nvd1)
+- Run ./benchmark.sh
+- Data can be found in the data directory. FFS = ffs, FFS+m = ffs-mmap, FFS+m,bd = ffs-mmap-bufdirect, MemSnap = slsfs-latest. 
+- Run ./graph.py - To generate tps.png (Fig 5a) lat.png (Fig 5b)
+- Run ./rusage.py - To generate kibs.png (Fig 5c) iops.png (Fig 5d)
+- In the case of a crash, you should comment out the already succeeded benchmarks (they are broken up by seperate run commands) in the benchmark.sh file as to not constanty re-run already succeeded benchmarks. 
+- Default number of iterations is 5, with each iteration taking 10-15 minutes. 4 Seperate major datapoints, means the benchmark could take up to 4-5 hours.

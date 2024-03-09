@@ -9,9 +9,7 @@ from matplotlib.ticker import FuncFormatter
 matplotlib.use('Agg')
 
 import matplotlib.pyplot as plt
-import scienceplots
 import numpy as np
-plt.style.use(['science', 'ieee'])
 
 def convert(date):
     return timedelta(hours=date.hour, minutes=date.minute, seconds=date.second, microseconds=date.microsecond)

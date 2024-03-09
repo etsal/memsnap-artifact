@@ -6,9 +6,7 @@ matplotlib.use('Agg')
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
-import scienceplots
 import numpy as np
-plt.style.use(['science', 'ieee'])
 
 def y_fmt(y, pos):
     decades = [1e9, 1e6, 1e3, 1e0, 1e-3, 1e-6, 1e-9 ]
