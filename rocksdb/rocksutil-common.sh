@@ -34,7 +34,7 @@ rocksutil_runbenchmark()
 	RUFILE="$DIR/rusage.$ITER"
 	# XXX Add PMCSTACK
 
-	chroot $AURMNT /bin/sh -c "$EXECNAME $CMDLINE" &
+	chroot $AURMNT /bin/sh -c "$EXECNAME $CMDLINE | tee > $TMP 2> $TMP " &
 	FUNC_PID="$!"
 	util_start_dtrace $DTRACEOUT $DTRACESCRIPT ""
 	sleep 1

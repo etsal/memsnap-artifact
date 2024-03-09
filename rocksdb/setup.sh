@@ -47,7 +47,7 @@ rocksdb_setup()
 
     rocksdb_compile "$PWD" "slsdb-beta2" "slsdb"
     rocksdb_compile "$PWD" "sls-baseline2" "baseline"
-    rocksdb_compile "$PWD" "sls2" "sls"
+    rocksdb_compile "$PWD" "slsdb-aurmemsnap" "sls"
 }
 
 check_dependencies

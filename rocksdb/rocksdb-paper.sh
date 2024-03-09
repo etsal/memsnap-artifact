@@ -124,14 +124,14 @@ NAME=artifact
 rocksutil_preamble
 
 gstripe create $CKPTSTRIPE $CKPTDISKS
-for LIMIT in `seq 24 1 24`; do
-	rocksdb_setup_aurora "slsdb" "true"
-	rocksdb_slsdb $LIMIT false "slsdb" 
-	rocksdb_teardown_aurora
-done
+#for LIMIT in `seq 24 1 24`; do
+#	rocksdb_setup_aurora "slsdb" "true"
+#	rocksdb_slsdb $LIMIT false "slsdb" 
+#	rocksdb_teardown_aurora
+#done
 
 for LIMIT in `seq 24 1 24`; do
-	rocksdb_setup_aurora "slsdb" "false"
+	rocksdb_setup_aurora "sls" "false"
 	rocksdb_slsdb $LIMIT "false" "aurora"
 	rocksdb_teardown_aurora
 done
