@@ -57,6 +57,7 @@ The first step is to generate the numbers to be used by the scripts using the fo
 
 To generate the graphs and tables for the SQLite benchmakrs, go to sqlite/graphs and run the following commands. The PNGs are in sqlite/graphs/pgfs.
 
+- setup.sh: Copies the numbers into the graphs directory to be used by the scripts.
 - figure3.sh: Generates a PNG graph for Figure 3 (Comparison of baseline and MemSnap SQLite performance for dbbench) 
 - figure4.sh: Generates a PNG graph for Figure 4 (Comparison of baseline and MemSnap SQLite performance for TATP)
 - table7.sh: Prints out a table for Table 7 (Comparison between MemSnap microcheckpoints and the file API for 4KiB, 64KiB and 1024KiB transaction sizes)
