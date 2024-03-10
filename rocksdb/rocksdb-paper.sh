@@ -60,11 +60,6 @@ rocksdb_setup_aurora()
 		gstripe create -s 65536 $CKPTSTRIPE $@
 	fi
 
-	if [ -n "$WALSTRIPE" ]; then
-		set -- $WALDISKS
-		gstripe create -s 65536 $WALSTRIPE $@
-	fi
-
 	rocksutil_aursetup $MNT $CONFIG "$PROTECT"
 }
 
@@ -72,7 +67,6 @@ rocksdb_teardown_aurora()
 {
 	rocksutil_aurteardown $MNT
 	if [ -n "$CKPTSTRIPE" ]; then gstripe stop $CKPTSTRIPE; fi
-	if [ -n "$WALSTRIPE" ]; then gstripe stop $WALSTRIPE; fi
 }
 
 rocksdb_baseline()
