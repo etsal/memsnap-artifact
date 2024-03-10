@@ -75,5 +75,6 @@ To generate the graphs and tables for the SQLite benchmakrs, go to sqlite/graphs
 - Data can be found in the data directory. FFS = ffs, FFS+m = ffs-mmap, FFS+m,bd = ffs-mmap-bufdirect, MemSnap = slsfs-latest. 
 - Run ./graph.py - To generate tps.png (Fig 5a) lat.png (Fig 5b)
 - Run ./rusage.py - To generate kibs.png (Fig 5c) iops.png (Fig 5d)
+- Please note the graphs are not the exact same in style as we removed the latek packages they we typically used as the package was burdensome for the artifact.
 - In the case of a crash, you should comment out the already succeeded benchmarks (they are broken up by seperate run commands) in the benchmark.sh file as to not constanty re-run already succeeded benchmarks. 
 - Default number of iterations is 5, with each iteration taking 10-15 minutes. 4 Seperate major datapoints, means the benchmark could take up to 4-5 hours.

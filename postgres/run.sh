@@ -8,6 +8,7 @@ export SRCROOT=/root/memsnap-artifact/aurora-memsnap/
 
 . $SRCROOT/tests/aurora
 
+export OUT=data
 
 
 print_usage() {

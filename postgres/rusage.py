@@ -203,5 +203,4 @@ for key in interested_keys:
     data_key = data_key.replace(" ", "_")
     fig.tight_layout()
 
-    fig.savefig(f"{data_key}.pgf")
     fig.savefig(f"{data_key}.png")
