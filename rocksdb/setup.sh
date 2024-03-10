@@ -43,7 +43,7 @@ rocksdb_setup()
     # Needed for SRCROOT
     . rocksdb.config 
 
-    git clone "ssh://vcs@review.rcs.uwaterloo.ca:77/source/SLS-rocksdb.git" "rocksdb"
+    git clone "https://github.com/rcslab/aurora-rocksdb.git" "rocksdb"
 
     rocksdb_compile "$PWD" "slsdb-beta2" "slsdb"
     rocksdb_compile "$PWD" "sls-baseline2" "baseline"
