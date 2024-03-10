@@ -106,10 +106,9 @@ main(int argc, char **argv)
 
 	/* Snapshot and return an error. */
 	for (int i = 0; i < ITERATIONS; i++) {
-		for (int j = 0; j < ckpt_size / PAGESIZE; j++) {
-			off = (((rand() % DBSIZE) / PAGESIZE) * PAGESIZE);
-			memset(&db[off], rand(), PAGESIZE);
-		}
+		off = (((rand() % DBSIZE) / PAGE_SIZE) * PAGE_SIZE);
+		off = off < DBSIZE - ckpt_size ? off : DBSIZE - ckpt_size;
+		memset(&db[off], rand(), ckpt_size);
 
 		clock_gettime(CLOCK_REALTIME_PRECISE, &tstart);
 		error = sls_memsnap_epoch(OID, db, &nextepoch);

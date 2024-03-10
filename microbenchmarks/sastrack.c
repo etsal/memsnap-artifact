@@ -86,9 +86,9 @@ main(int argc, char **argv)
 
 	/* Snapshot and return an error. */
 	for (int i = 0; i < ITERATIONS; i++) {
-		for (int j = 0; j < ckpt_size / PAGE_SIZE; j++) {
-			off = (((rand() % DBSIZE) / PAGE_SIZE) * PAGE_SIZE);
-			memset(&db[off], rand(), PAGE_SIZE);
+		for (int j = 0; j < ckpt_size / PAGESIZE; j++) {
+			off = (((rand() % DBSIZE) / PAGESIZE) * PAGESIZE);
+			memset(&db[off], rand(), PAGESIZE);
 		}
 
 		clock_gettime(CLOCK_REALTIME_PRECISE, &tstart);
