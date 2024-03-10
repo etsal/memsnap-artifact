@@ -13,6 +13,7 @@
 #include "../aurora-original/include/sls.h"
 #include "helper.h"
 
+#define DBSIZE (256 * MB)
 #define ITERATIONS (1)
 #define OID (2358)
 
@@ -89,14 +90,14 @@ main(int argc, char **argv)
 
 	srand(17);
 
-	db = mmap((void *)0x100000000, ckpt_size, PROT_READ | PROT_WRITE,
+	db = mmap((void *)0x100000000, DBSIZE, PROT_READ | PROT_WRITE,
 	    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
 	if (db == MAP_FAILED) {
 		perror("mmap");
 		return (-1);
 	}
 
-	memset(db, (rand() % ('z' - 'a')) + 'a', ckpt_size);
+	memset(db, (rand() % ('z' - 'a')) + 'a', DBSIZE);
 
 	error = checkpoint(blocking);
 	if (error != 0)
@@ -106,7 +107,10 @@ main(int argc, char **argv)
 
 	/* Snapshot and return an error. */
 	for (int i = 0; i < ITERATIONS; i++) {
-		memset(db, rand(), ckpt_size);
+		for (int j = 0; j < ckpt_size / PAGESIZE; j++) {
+			off = (((rand() % DBSIZE) / PAGESIZE) * PAGESIZE);
+			memset(&db[off], rand(), PAGESIZE);
+		}
 
 		clock_gettime(CLOCK_REALTIME_PRECISE, &tstart);
 		error = sls_checkpoint_epoch(OID, true, &nextepoch);

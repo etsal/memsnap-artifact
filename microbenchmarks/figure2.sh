@@ -19,7 +19,7 @@ for i in 1 16 1024; do
 	sleep 1
 	sysctl aurora.objprotect=0 >/dev/null 2>/dev/null
 	sysctl aurora.tracebuf=0 >/dev/null 2>/dev/null
-	./memsnap $(( $i * 4096 )) "YES"
+	./memsnap $(( $i * 4096 )) 
 	sleep 1
 	sfini
 

@@ -64,8 +64,8 @@ checkpoint(char blocking)
 int
 main(int argc, char **argv)
 {
+	struct timespec tstart, tmid, tend;
 	size_t ckpt_size, sync_time = 0;
-	struct timespec tstart, tend;
 	uint64_t nextepoch;
 	size_t total_time;
 	bool blocking;
@@ -115,13 +115,13 @@ main(int argc, char **argv)
 		error = sls_memsnap_epoch(OID, db, &nextepoch);
 		if (error != 0)
 			return (-1);
-		clock_gettime(CLOCK_REALTIME_PRECISE, &tend);
 
 		error = sls_untilepoch(OID, nextepoch);
 		if (error != 0) {
 			fprintf(stderr, "sls_untilepoch: %s\n", strerror(error));
 			return (-1);
 		}
+		clock_gettime(CLOCK_REALTIME_PRECISE, &tend);
 		sync_time += (nanotime(&tstart, &tend) / 1000);
 	}
 
