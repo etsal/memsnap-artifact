@@ -46,7 +46,6 @@ rocksutil_runbenchmark()
 	sleep 40
 
 	echo "Setting up DTrace"
-	util_start_pmcstat $PMCFILE
 	util_start_rusage $RUFILE `pidof $EXECNAME` >> $LOG 2>> $LOG &
 	RUPID="$!"
 
@@ -59,8 +58,6 @@ rocksutil_runbenchmark()
 
 	util_stop_rusage $RUPID >> $LOG 2>> $LOG
 	util_stop_dtrace
-	util_stop_pmcstat
-	util_process_pmcstat $GMONDIR $PMCFILE $PMCTXT $PMCGRAPH $PMCSTACK
 
 	mv "$AURMNT/$TMP" $OUTFILE
 	fsync $OUTFILE
