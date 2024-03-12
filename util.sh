@@ -284,3 +284,49 @@ util_stop_sysctl() {
 	SYSCTLPID=$1
 	kill -SIGTERM $SYSCTLPID
 }
+
+util_aursetup_old()
+{
+   	$OLDAUR/tools/newfs_sls/newfs_sls $DISKPATH > /dev/null 
+
+    	kldload $OLDAUR/slos/slos.ko
+	mount -t slsfs $DISKPATH "$MNT"
+
+	mkdir "$MNT/dev"
+	mount -t devfs devfs "$MNT/dev"
+
+    	kldload $OLDAURsls/sls.ko
+}
+
+util_aurteardown_old()
+{
+   	kldunload sls
+	umount "$MNT"
+   	kldunload slos
+}
+
+util_setup_oldaurora()
+{
+	FSMNT=$1
+	INFREQUENT=$(( 10 * 1000 ))
+
+	echo "[Aurora `date +'%T'`] Loading the Aurora module"
+	MNT=$FSMNT util_aurteardown_old > $LOG 2> $LOG
+	MNT=$FSMNT util_aursetup_old
+
+	if [ $# -eq 2 ]; then
+		sysctl aurora_slos.checkpointtime=$2 >/dev/null 2>/dev/null
+	else
+		sysctl aurora_slos.checkpointtime=$INFREQUENT >/dev/null 2>/dev/null
+	fi
+
+}
+
+
+util_teardown_oldaurora()
+{
+	FSMNT=$1
+
+	sleep 2
+	MNT=$FSMNT util_aurteardown_old > /dev/null 2> /dev/null
+}
