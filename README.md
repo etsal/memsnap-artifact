@@ -29,8 +29,10 @@ Setting Up
 
 WARNING: The MemSnap scripts require two dedicated disks to function properly. These are normally called vtbd1 and vtbd2 if the machine is a virtual machinme, or nvd0 and nvd1 for NVMe drives on a physical machine. You must specify the names of the two disks in ~/.profile, like so:
 
+```
 export DISK1="<diskname>"
 export DISK2="<diskname>"
+```
 
 The setup process for the artifact involves 3 steps:
 
