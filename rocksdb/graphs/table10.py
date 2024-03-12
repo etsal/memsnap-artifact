@@ -33,6 +33,8 @@ def fill_config(datadir):
         dtrace_iter(dfile, times, counts)
 
         for key in times:
+            if key not in counts:
+                continue
             conf[key] = (times[key], counts[key])
 
     return conf
@@ -52,6 +54,7 @@ def dtrace(datadir):
     data = fill_config(datadir)
     ops = ["memsnap", "fsync", "write", "checkpoint"]
     for op in ops:
+
         print(r"{\bf \code{" + str(op) + "} } & ", end="")
         (latency, times) = data[op]
 

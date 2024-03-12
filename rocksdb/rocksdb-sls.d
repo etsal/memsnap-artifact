@@ -6,12 +6,12 @@ self uint64_t start, current;
 fbt::slsckpt_dataregion:entry
 {
     self->start = self->current = timestamp;
-    @tcnt["memsnap"] = count();
+    @tcnt["checkpoint-count"] = count();
 }
 
 fbt::slsckpt_dataregion:return
 {
-    @tavg["memsnap"] = avg(timestamp - self->current);
+    @tavg["checkpoint"] = avg(timestamp - self->start);
 }
 
 sls:::enter
@@ -52,7 +52,7 @@ sas:::start
     @tavg["attempted"] = avg(arg2);
     @tavg["copied"] = avg(arg3);
 
-    @tcnt["sas-count"] = count();
+    @tcnt["memsnap-count"] = count();
 }
 
 sas:::protect
@@ -74,7 +74,7 @@ sas:::block
     @tavg["block"] = avg(timestamp - self->current);
     self->current = timestamp;
 
-    @tavg["sas"] = avg(timestamp - self->start);
+    @tavg["memsnap"] = avg(timestamp - self->start);
 }
 
 END
