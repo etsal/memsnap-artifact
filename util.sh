@@ -295,12 +295,13 @@ util_aursetup_old()
 	mkdir "$MNT/dev"
 	mount -t devfs devfs "$MNT/dev"
 
-    	kldload $OLDAURsls/sls.ko
+    	kldload $OLDAUR/sls/sls.ko
 }
 
 util_aurteardown_old()
 {
    	kldunload sls
+	umount "$MNT/dev"
 	umount "$MNT"
    	kldunload slos
 }
@@ -321,7 +322,6 @@ util_setup_oldaurora()
 	fi
 
 }
-
 
 util_teardown_oldaurora()
 {

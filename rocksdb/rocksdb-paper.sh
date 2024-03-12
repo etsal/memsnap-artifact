@@ -11,27 +11,16 @@ set -a
 OID=1500
 set +a
 
-rocksdb_no_op()
-{
-        echo "No-op, continuing"
-}
-
-rocksdb_slsdb_teardown()
-{
-        slsctl partdel -o $OID
-}
-
 rocksdb_slsdb()
 {
-    PAGE_LIMIT=$1
-    FULLCHECKPOINT=$2
-    CFGNAME=$3
+    CFGNAME=$1
+
+    PAGE_LIMIT=24
+    FULLCHECKPOINT="false"
 
     DIR="$OUT/rocksdb/slsdb-$CFGNAME-$PAGE_LIMIT"
     CONFIG="slsdb-$CFGNAME-$PAGE_LIMIT"
     DTRACESCRIPT="$PWD/rocksdb-sls.d"
-    SETUP_FUNC=rocksdb_no_op
-    TEARDOWN_FUNC=rocksdb_slsdb_teardown
     WALPATH="/tmp/log"
     CMDLINE="$BASEDB_BENCH_ARGS \
     	--disable_auto_compactions \
@@ -46,48 +35,13 @@ rocksdb_slsdb()
 	--full_checkpoint=$FULLCHECKPOINT \
 	--ignore_wal=false"
 
-    	#--allow_concurrent_memtable_write=false \
-    rocksutil_runbenchmark "slsdb" "$CONFIG" "$SETUP_FUNC" "$TEARDOWN_FUNC" "$CMDLINE" "$DTRACESCRIPT"
-}
-
-rocksdb_setup_aurora()
-{
-	CONFIG="$1"
-	PROTECT="$2"
-	
-	if [ -n "$CKPTSTRIPE" ]; then
-		set -- $CKPTDISKS
-		gstripe create -s 65536 $CKPTSTRIPE $@
-	fi
-
-	rocksutil_aursetup $MNT $CONFIG "$PROTECT"
-}
-
-rocksdb_teardown_aurora()
-{
-	rocksutil_aurteardown $MNT
-	if [ -n "$CKPTSTRIPE" ]; then gstripe stop $CKPTSTRIPE; fi
-}
-
-rocksdb_baseline()
-{
-    PAGE_LIMIT=$1
-    CFGNAME=$2
-    CMDLINE=$3
-
-    DIR="$OUT/rocksdb/slsdb-$CFGNAME-$PAGE_LIMIT"
-    CONFIG="slsdb-$CFGNAME-$PAGE_LIMIT"
-    DTRACESCRIPT="$PWD/rocksdb-baseline.d"
-    SETUP_FUNC=rocksdb_no_op
-    TEARDOWN_FUNC=rocksdb_no_op
-
-    rocksutil_runbenchmark "slsdb" "$CONFIG" "$SETUP_FUNC" "$TEARDOWN_FUNC" "$CMDLINE" "$DTRACESCRIPT"
+    rocksutil_runbenchmark "$CONFIG" "$CMDLINE" "$DTRACESCRIPT"
 }
 
 rocksdb_compact()
 {
-    PAGE_LIMIT=$1
-    CFGNAME=$2
+    CFGNAME=$1
+    PAGE_LIMIT=24
     CMDLINE="$BASEDB_BENCH_ARGS \
 	--enable_pipelined_write=false \
     	--allow_concurrent_memtable_write=false \
@@ -96,7 +50,11 @@ rocksdb_compact()
 	--disable_wal=false \
 	--write_buffer_size=$(( 2 << $PAGE_LIMIT ))"
 
-    rocksdb_baseline "$PAGE_LIMIT" "$CFGNAME" "$CMDLINE"
+    DIR="$OUT/rocksdb/slsdb-$CFGNAME-$PAGE_LIMIT"
+    CONFIG="slsdb-$CFGNAME-$PAGE_LIMIT"
+    DTRACESCRIPT="$PWD/rocksdb-baseline.d"
+
+    rocksutil_runbenchmark "$CONFIG" "$CMDLINE" "$DTRACESCRIPT"
 }
 
 rocksdb_setup_zfs()
@@ -118,23 +76,19 @@ NAME=artifact
 rocksutil_preamble
 
 gstripe create $CKPTSTRIPE $CKPTDISKS
-#for LIMIT in `seq 24 1 24`; do
-#	rocksdb_setup_aurora "slsdb" "true"
-#	rocksdb_slsdb $LIMIT false "slsdb" 
-#	rocksdb_teardown_aurora
-#done
-
-for LIMIT in `seq 24 1 24`; do
-	rocksdb_setup_aurora "sls" "false"
-	rocksdb_slsdb $LIMIT "false" "aurora"
-	rocksdb_teardown_aurora
-done
+rocksutil_aursetup $MNT 
+rocksdb_slsdb "slsdb" 
+rocksutil_aurteardown $MNT
 gstripe destroy $CKPTSTRIPE
 
-#for LIMIT in `seq 24 1 24`; do
-#	rocksdb_setup_zfs
-#	rocksdb_compact $LIMIT "compact"
-#	rocksdb_teardown_zfs
-#done
+rocksdb_setup_zfs
+rocksdb_compact "compact"
+rocksdb_teardown_zfs
+
+gstripe create $CKPTSTRIPE $CKPTDISKS
+rocksutil_oldsetup $MNT 
+rocksdb_slsdb "aurora"
+rocksutil_oldteardown $MNT
+gstripe destroy $CKPTSTRIPE
 
 rocksutil_epilogue

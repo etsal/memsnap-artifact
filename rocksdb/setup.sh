@@ -22,6 +22,7 @@ rocksdb_compile()
     BASEDIR="$1"
     BRANCH="$2"
     BUILDDIR="$1/rocksdb/$3"
+    SLSROOT=$4
 
     THRS=`sysctl hw.ncpu | awk -F ' ' '{print $2}'`
 
@@ -32,9 +33,8 @@ rocksdb_compile()
 
     mkdir -p $BUILDDIR
     cd $BUILDDIR
-    cmake .. -DCMAKE_BUILD_TYPE=Release -DFAIL_ON_WARNINGS=OFF -DWITH_SNAPPY=ON -DSLS_PATH=$SRCROOT
+    cmake .. -DCMAKE_BUILD_TYPE=Release -DFAIL_ON_WARNINGS=OFF -DWITH_SNAPPY=ON -DSLS_PATH=$SLSROOT
     make -j $THRS db_bench
-
     cd $BASEDIR
 }
 
@@ -45,9 +45,9 @@ rocksdb_setup()
 
     git clone "https://github.com/rcslab/aurora-rocksdb.git" "rocksdb"
 
-    rocksdb_compile "$PWD" "slsdb-beta2" "slsdb"
-    rocksdb_compile "$PWD" "sls-baseline2" "baseline"
-    rocksdb_compile "$PWD" "slsdb-aurmemsnap" "sls"
+    rocksdb_compile "$PWD" "slsdb-beta2" "slsdb" $SRCROOT
+    rocksdb_compile "$PWD" "slsdb-region2" "sls" $OLDAUR
+    rocksdb_compile "$PWD" "sls-baseline2" "baseline" $SRCROOT
 }
 
 check_dependencies
