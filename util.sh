@@ -49,9 +49,9 @@ util_setup_root()
 	MNT=$FSMNT installroot
 	cp /etc/resolv.conf $FSMNT/etc/resolv.conf
 	mkdir -p $MNT/packages
-	cp -r packages $FSMNT/packages
+	cp -r packages $FSMNT/packages/Latest
 	chroot $FSMNT /bin/sh -c 'env PACKAGESITE=file:/packages pkg bootstrap -y'
-	chroot $FSMNT /bin/sh -c 'IGNORE_OSVERSION=yes ASSUME_ALWAYS_YES=yes pkg add /packages/*.pkg'
+	chroot $FSMNT /bin/sh -c 'IGNORE_OSVERSION=yes ASSUME_ALWAYS_YES=yes pkg add /packages/Latest/*.pkg'
 
 	echo "[Aurora `date +'%T'`] Copying over necessary files"
 	mkdir -p $FSMNT/usr/lib/debug/boot/modules >/dev/null

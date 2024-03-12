@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # Install packages included with this artifact.
-cp -r packages /packages
+mkdir /packages
+cp -r packages /packages/Latest
 
 # Set up local variables required for installation and benchmarking
 mkdir /testmnt
@@ -9,10 +10,10 @@ echo "export MNT=/testmnt" >> ~/.profile
 echo "export IGNORE_OSVERSION=\"yes\"" >> ~/.profile
 
 env PACKAGESITE=file:/packages pkg bootstrap
-pkg add /packages/bash-5.2.15.pkg
+pkg add /packages/Latest/bash-5.2.15.pkg
 chsh -s "/usr/local/bin/bash"
 
-for p in `ls /packages/*.pkg`; 
+for p in `ls /packages/Latest/*.pkg`; 
 	do /bin/sh -c "pkg add $p";
 done
 
