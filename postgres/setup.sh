@@ -8,7 +8,6 @@ postgres_setup()
   git clone --depth=1 https://github.com/krhancoc/postgres.git postgres
 
   echo "Adding correct users"
-  sudo adduser -f users > /dev/null 2> /dev/null
   # CREATE THE POSTGRES USER - No password auth
   sudo pw user add -n postgres -s /bin/sh -m -w none
 

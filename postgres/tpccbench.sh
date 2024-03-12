@@ -6,17 +6,21 @@ THREADS=24
 HOST="129.97.75.131"
 
 preparetpcc() {
-  cd sysbench-tpcc
-   cpuset -c -l 24-47 ./tpcc.lua --tables=$TABLES --db-driver=pgsql --pgsql-user=sbtest \
-    --pgsql-db=test --threads=$THREADS --scale=$SCALE --report-interval=1 \
-    --time=$TIME prepare
-  cd -
+	half=$(($(sysctl -n hw.ncpu) / 2))
+	total=$(($(sysctl -n hw.ncpu) - 1))
+	cd sysbench-tpcc
+		cpuset -c -l $half-$total ./tpcc.lua --tables=$TABLES --db-driver=pgsql --pgsql-user=sbtest \
+			--pgsql-db=test --threads=$THREADS --scale=$SCALE --report-interval=1 \
+			--time=$TIME prepare
+	cd -
 }
 
 runtpcc () {
+	half=$(($(sysctl -n hw.ncpu) / 2))
+  	total=$(($(sysctl -n hw.ncpu) - 1))
 	cd sysbench-tpcc
   TXNIDB=$(psql -U sbtest -d test -c "SELECT pg_current_xact_id();")
-	cpuset -c -l 24-47 ./tpcc.lua --tables=$TABLES --db-driver=pgsql \
+	cpuset -c -l $half-$total ./tpcc.lua --tables=$TABLES --db-driver=pgsql \
 	--pgsql-user=sbtest --pgsql-db=test \
 	--threads=$THREADS --time=$TIME --trx_level=RC --scale=$SCALE run &
 	PID=$!

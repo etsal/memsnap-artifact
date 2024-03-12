@@ -126,9 +126,10 @@ pgrun() {
 
 
   elif [ "$1" = "tpcc" ]; then
+    half=$(($(sysctl -n hw.ncpu) / 2))
     for x in `pidof postgres`;
     do
-        cpuset -l 0-24 -c -p $x
+        cpuset -l 0-$half -c -p $x
     done
 
     preparetpcc
