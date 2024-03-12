@@ -8,8 +8,9 @@ cp -r packages /packages/Latest
 mkdir /testmnt
 echo "export MNT=/testmnt" >> ~/.profile
 echo "export IGNORE_OSVERSION=\"yes\"" >> ~/.profile
+export IGNORE_OSVERSION=yes
 
-env PACKAGESITE=file:/packages pkg bootstrap
+env PACKAGESITE=file:/packages echo y | pkg bootstrap
 pkg add /packages/Latest/bash-5.2.15.pkg
 chsh -s "/usr/local/bin/bash"
 
