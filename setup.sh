@@ -10,7 +10,7 @@ echo "export MNT=/testmnt" >> ~/.profile
 echo "export IGNORE_OSVERSION=\"yes\"" >> ~/.profile
 export IGNORE_OSVERSION=yes
 
-env PACKAGESITE=file:/packages echo y | pkg bootstrap
+env PACKAGESITE=file:/packages ASSUME_ALWAYS_YES="yes" pkg bootstrap
 pkg add /packages/Latest/bash-5.2.15.pkg
 chsh -s "/usr/local/bin/bash"
 
