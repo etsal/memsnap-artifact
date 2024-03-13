@@ -46,7 +46,7 @@ rocksdb_setup()
     git clone "https://github.com/rcslab/aurora-rocksdb.git" "rocksdb"
 
     rocksdb_compile "$PWD" "slsdb-beta2" "slsdb" $SRCROOT
-    rocksdb_compile "$PWD" "slsdb-region2" "sls" $OLDAUR
+    rocksdb_compile "$PWD" "slsdb-region2" "sls" $SRCROOT
     rocksdb_compile "$PWD" "sls-baseline2" "baseline" $SRCROOT
 }
 
