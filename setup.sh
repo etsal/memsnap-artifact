@@ -22,15 +22,6 @@ done
 rm /usr/lib/dtrace/psinfo.d
 rm /usr/lib/dtrace/ip.d
 
-# Initialize all the submodules
-git submodule update --init aurora-original
-git submodule update --init aurora-memsnap
-git submodule update --init FlameGraph
-git submodule update --init sqlite/auroravfs
-git submodule update --init sqlite/sqlite
-git submodule update --init sqlite/db_bench
-git submodule update --init sqlite/tatp
-
 # Set up bootloader options
 cat loader.conf >> /boot/loader.conf
 
