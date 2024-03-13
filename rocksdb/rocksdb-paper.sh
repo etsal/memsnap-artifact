@@ -86,9 +86,9 @@ rocksdb_compact "compact"
 rocksdb_teardown_zfs
 
 gstripe create $CKPTSTRIPE $CKPTDISKS
-rocksutil_oldsetup $MNT 
+rocksutil_regionsetup $MNT
 rocksdb_slsdb "aurora"
-rocksutil_oldteardown $MNT
+rocksutil_regionteardown $MNT
 gstripe destroy $CKPTSTRIPE
 
 rocksutil_epilogue

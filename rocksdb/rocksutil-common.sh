@@ -65,7 +65,7 @@ rocksutil_aursetup()
 {
 	AURMNT=$1
 
-	util_setup_aurora $AURMNT 
+	util_setup_aurora $AURMNT
 	sysctl aurora.objprotect=1;
 
 	util_setup_root $AURMNT
@@ -81,11 +81,11 @@ rocksutil_aurteardown()
 	util_teardown_aurora $AURMNT
 }
 
-rocksutil_oldsetup()
+rocksutil_regionsetup()
 {
 	AURMNT=$1
 
-	util_setup_oldaurora $AURMNT 
+	util_setup_aurora $AURMNT
 	sysctl aurora.objprotect=1
 
 	util_setup_root $AURMNT
@@ -94,11 +94,11 @@ rocksutil_oldsetup()
 	echo "Setup done"
 }
 
-rocksutil_oldteardown()
+rocksutil_regionteardown()
 {
 	AURMNT=$1
 
-	util_teardown_oldaurora $AURMNT
+	util_teardown_aurora $AURMNT
 }
 
 
