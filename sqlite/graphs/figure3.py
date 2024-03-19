@@ -15,6 +15,8 @@ import numpy as np
 matplotlib.rcParams.update({'font.size': 9})
 matplotlib.rcParams.update({'font.serif': "Times"})
 
+ARTIFACT_DIR="sqlite-batch-artifact"
+
 metrics = ["min", "50th", "90th", "99th", "avg", "stddev" ]
 
 def sqlite_iter(valuefile):
@@ -50,10 +52,10 @@ def sqlite_iter(valuefile):
     return writeresults
 
 
-def fill_config(datadir, name):
+def fill_config(datadir, bench, name):
     config = dict()
 
-    for dirname in os.listdir(datadir):
+    for dirname in [d for d in os.listdir(datadir) if bench in d]:
         if dirname.split("-")[0] != name:
             continue
 
@@ -101,8 +103,8 @@ def generate_metric(path, xvals, sls, slsstd, baseline, basestd, legend, si):
 
 
 def metrics_pgf(bench):
-    confbase = fill_config(Path.cwd() / bench, "baseline")
-    confsls = fill_config(Path.cwd() / bench, "sls")
+    confbase = fill_config(Path.cwd().parent / "data" / ARTIFACT_DIR, bench, "baseline")
+    confsls = fill_config(Path.cwd().parent / "data"/ ARTIFACT_DIR, bench, "sls")
 
     xvals = sorted(map(int, confsls.keys()))
     stdindex = metrics.index("stddev")

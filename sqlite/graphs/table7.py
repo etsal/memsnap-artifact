@@ -9,6 +9,8 @@ import random
 from statistics import stdev
 import sys
 
+ARTIFACT_DIR="sqlite-batch-artifact"
+
 prelude=r"""
 \documentclass{article}
 \usepackage{booktabs}
@@ -40,10 +42,10 @@ def dtrace_iter(valuefile, times, counts):
             else:
                 times[name] = int(value)
 
-def fill_config(datadir):
+def fill_config(datadir, bench):
     config = dict()
 
-    for dirname in os.listdir(datadir):
+    for dirname in [d for d in os.listdir(datadir) if bench in d]:
         name = dirname.split("-")
 
         transaction_size = int(name[2])
@@ -58,8 +60,8 @@ def fill_config(datadir):
         slsname = "-".join([ "sls" ] + name[1:])
         basename = "-".join([ "baseline" ] + name[1:])
 
-        slsfile = Path.cwd() / datadir / slsname / "dtrace.0"
-        basefile = Path.cwd() / datadir / basename / "dtrace.0"
+        slsfile = Path.cwd().parent / "data" / ARTIFACT_DIR / slsname / "dtrace.0"
+        basefile = Path.cwd().parent / "data" / ARTIFACT_DIR / basename / "dtrace.0"
         dtrace_iter(slsfile, times, counts)
         dtrace_iter(basefile, times, counts)
 
@@ -78,8 +80,8 @@ def line(data):
         print(r"& {}~us & {}~K ".format(time, count), end="")
     print(r"\\")
 
-def dtrace(bench):
-    data = fill_config(bench)
+def dtrace(datadir, bench):
+    data = fill_config(datadir, bench)
     for transaction_size in sorted(list(map(int, data.keys()))):
         print(r" {} KiB".format((transaction_size) * 4), end="")
         line(data[transaction_size])
@@ -104,13 +106,13 @@ def footer():
 
 def sqlite_graph(datadir):
     conf = fill_config(datadir)
-    #report_dtrace(conf)
 
 if __name__ == "__main__":
     header()
     for bench in [ "fillrandbatch", "fillseqbatch" ]:
         print(r"{\bf Random IO} \\ " if bench == "fillrandbatch" else r"{\bf Sequential IO} \\ ")
-        dtrace(bench)
+        datadir = Path.cwd().parent / "data" / ARTIFACT_DIR 
+        dtrace(datadir, bench)
         print(r"\midrule")
     footer()
 

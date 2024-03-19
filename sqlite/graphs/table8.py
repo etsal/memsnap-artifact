@@ -9,6 +9,8 @@ import os
 import subprocess
 import sys
 
+ARTIFACT_DIR="sqlite-batch-artifact"
+
 prelude=r"""
 \documentclass{article}
 \usepackage{booktabs}
@@ -59,7 +61,7 @@ def parse(datafile, syscalls):
     return data
 
 def parseconfig(config):
-    datafile = Path.cwd() / bench / "-".join([ config, "batch", "8", bench ]) / "flamegraph.0.svg"
+    datafile = Path.cwd().parent / "data" / ARTIFACT_DIR / "-".join([ config, "batch", "8", bench ]) / "flamegraph.0.svg"
     return parse(datafile, configs[config])
 
 def baseline(descr, value):

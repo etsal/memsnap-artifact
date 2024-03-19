@@ -8,6 +8,8 @@ import numpy as np
 import os
 import sys
 
+ARTIFACT_DIR="sqlite-tatpsls-artifact"
+
 def sqlite_iter(valuefile):
     with open(valuefile) as f:
         line = f.readline()
@@ -22,7 +24,6 @@ def report_metrics(keys, basenums, slsnums):
     for i , (label, color, vals) in enumerate([("baseline", "orange", basenums), ("memsnap", "blue", slsnums)]):
         offset = width * i
         rects = ax.bar(x + offset, vals, width, label=label, color=color)
-        #ax.bar_label(rects, padding = 3)
 
     ax.set(ylabel="Total Transactions")
     ax.set(xlabel="Number of Records")
@@ -50,7 +51,6 @@ def fill_config(datadir, name):
 
     return config
 
-
 def sqlite_graph(datadir):
     confbase = fill_config(datadir, "baseline")
     confsls = fill_config(datadir, "sls")
@@ -62,4 +62,4 @@ def sqlite_graph(datadir):
     report_metrics(keys, basenums, slsnums)
 
 if __name__ == "__main__":
-    sqlite_graph(Path.cwd() / "tatp")
+    sqlite_graph(Path.cwd().parent / "data" / ARTIFACT_DIR / "tatp")
