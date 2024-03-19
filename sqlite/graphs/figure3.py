@@ -111,9 +111,6 @@ def metrics_pgf(bench):
     slsstddev = [ confsls[str(xval)][stdindex] / 1000 for xval in xvals ]
     basestddev = [ confbase[str(xval)][stdindex] / 1000 for xval in xvals ]
 
-    slsstddevnormalized = [ confsls[str(xval)][stdindex] / xval for xval in xvals ]
-    basestddevnormalized = [ confbase[str(xval)][stdindex] / xval for xval in xvals ]
-
     for metric in [ "avg", "99th" ]:
         index = metrics.index(metric)
         sls = [ confsls[str(xval)][index] / 1000 for xval in xvals ]
@@ -125,17 +122,6 @@ def metrics_pgf(bench):
         legend = bench == "fillrandbatch" and metric == "avg"
         path = Path.cwd() / "pgfs" / "eval-total-{}-{}".format(bench, metric)
         si = "ms"
-        generate_metric(path, xvals, sls, slsstd, base, basestd, legend, si)
-
-        sls = [ confsls[str(xval)][index] / xval for xval in xvals ]
-        base = [ confbase[str(xval)][index] / xval for xval in xvals ]
-
-        slsstd = slsstddevnormalized if metric == "avg" else None
-        basestd = basestddevnormalized  if metric == "avg" else None
-
-        legend = False
-        path = Path.cwd() / "pgfs" / "eval-normalized-{}-{}".format(bench, metric)
-        print(path)
         generate_metric(path, xvals, sls, slsstd, base, basestd, legend, si)
 
 if __name__ == "__main__":
