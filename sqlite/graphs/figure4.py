@@ -62,4 +62,4 @@ def sqlite_graph(datadir):
     report_metrics(keys, basenums, slsnums)
 
 if __name__ == "__main__":
-    sqlite_graph(Path.cwd().parent / "data" / ARTIFACT_DIR / "tatp")
+    sqlite_graph(Path.cwd().parent / "data" / ARTIFACT_DIR)
