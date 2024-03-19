@@ -11,11 +11,10 @@ fbt::slsfs_sas_trace_commit:entry
 }
 
 fbt::slsfs_sas_trace_commit:return
-/pid == $1/
+/pid == $1 && timestamp > self->start/
 {
     @tavg["memsnap"] = avg(timestamp - self->start);
 }
-
 
 END
 {

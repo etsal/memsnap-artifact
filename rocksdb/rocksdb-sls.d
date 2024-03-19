@@ -56,12 +56,14 @@ sas:::start
 }
 
 sas:::protect
+/timestamp > self->current/
 {
     @tavg["protect"] = avg(timestamp - self->current);
     self->current = timestamp;
 }
 
 sas:::write
+/timestamp > self->current/
 {
     @tavg["write"] = avg(timestamp - self->current);
     @tsum["pages-total"] = sum(arg0);
@@ -70,6 +72,7 @@ sas:::write
 }
 
 sas:::block
+/timestamp > self->current && timestamp > self->start/
 {
     @tavg["block"] = avg(timestamp - self->current);
     self->current = timestamp;
