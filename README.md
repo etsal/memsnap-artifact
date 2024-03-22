@@ -67,7 +67,8 @@ To generate the graphs and tables for the SQLite benchmakrs, go to sqlite/graphs
 
 3) To run RocksDB, please go to the rocksdb/ directory. The benchmark has already been compiled by buildtests.sh. Running rocksdb-paper.sh will generate the numbers required by the graphing scripts. To generate the tables please go to rocksdb/graphs and run:
 
-- table9.sh: Prints out a table for Table 9 (Performance comparison between MemSnap-RocksDB, Aurora-RocksDB and baseline RocksDB for dbbench)
+- table9a.sh: Prints out a table for Table 9a (Performance comparison between MemSnap-RocksDB, Aurora-RocksDB and baseline RocksDB for dbbench)
+- table9b.sh: Prints out a table for Table 9b (DTrace breakdown of MemSnap and Aurora persistence operations)
 - table10.sh: Prints out a table for Table 10, (Latency breakdown and comparison between the MemSnap and Aurora persistence operations under RocksDB). The second column printed out is Table 2.
 
 3) To run PostGreSQL, please go to the postgres/ directory:

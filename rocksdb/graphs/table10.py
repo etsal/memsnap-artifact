@@ -7,7 +7,7 @@ import random
 from statistics import stdev
 import sys
 
-def dtrace_iter(valuefile, times, counts):
+def dtrace_iter(valuefile, conf):
     # avg, sttddev, min, max
     results = dict()
     with open(valuefile) as f:
@@ -15,29 +15,22 @@ def dtrace_iter(valuefile, times, counts):
             if len(line.strip()) == 0:
                 continue
             name, value = line.split()
-            if name.endswith("-count"):
-                counts[name.split("-")[0]] = int(value)
-            else:
-                times[name] = int(value)
+            if not name.endswith("-count"):
+                conf[name] = int(value)
 
 def fill_config(datadir):
-    conf = dict()
-
+    confs = dict()
     for dirname in os.listdir(datadir):
-        name = dirname.split("-")
+        name = dirname.split("-")[1]
 
-        counts = dict()
-        times = dict()
+        conf = dict()
 
         dfile = Path.cwd() / datadir / dirname / "dtrace.0"
-        dtrace_iter(dfile, times, counts)
+        dtrace_iter(dfile, conf)
 
-        for key in times:
-            if key not in counts:
-                continue
-            conf[key] = (times[key], counts[key])
+        confs[name] = conf
 
-    return conf
+    return confs
 
 
 def tonum(value):
@@ -52,31 +45,36 @@ def toSI(value):
 
 def dtrace(datadir):
     data = fill_config(datadir)
-    ops = ["memsnap", "fsync", "write", "checkpoint"]
-    for op in ops:
+    aurora = data["aurora"] 
+    memsnap = data["slsdb"]
+    descriptions = [ "Waiting for Calls", "Applying COW", "Flush IO", "Removing COW", "Total"]
+    aurora_results = [ aurora["enter"], aurora["cow"], aurora["write"], aurora["wait"] + aurora["cleanup"] ]
+    memsnap_results = [ 0,  memsnap["protect"], memsnap["write"] + memsnap["block"], 0]
 
-        print(r"{\bf \code{" + str(op) + "} } & ", end="")
-        (latency, times) = data[op]
+    aurora_row = list(map(lambda latency: tonum(latency), aurora_results))
+    memsnap_row = list(map(lambda latency: tonum(latency), memsnap_results))
 
-        # XXX Formatting
-        print(toSI(tonum(latency)) + r" & ", end="")
-        print(toSI(times) + r" \\")
+    aurora_row.append(sum(aurora_row))
+    memsnap_row.append(sum(memsnap_row))
+
+    for i, desc in enumerate(descriptions):
+
+        print(r"{\bf \code{" + str(desc) + "} } & ", end="")
+
+        print(toSI(memsnap_row[i]) + r" & ", end="")
+        print(toSI(aurora_row[i]) + r" \\")
 
 def header():
     print(r"\begin{tabular}{@{} c | c c @{}}")
     print(r"\toprule")
-    print(r"&  \multicolumn{2}{c}{Metrics} \\")
-    print(r"{\bf System Call} & {\bf Latency (us)} & {\bf Total Count} \\ ")
+    print(r"&  \multicolumn{2}{c}{Time (us)} \\")
+    print(r"{\bf Operation Call} & {\bf MemSnap} & {\bf Aurora} \\ ")
     print(r"\midrule")
 
 
 def footer():
     print(r"\bottomrule")
     print(r"\end{tabular}")
-
-
-def sqlite_graph(datadir):
-    conf = fill_config(datadir)
 
 if __name__ == "__main__":
     header()
