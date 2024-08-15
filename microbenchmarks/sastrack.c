@@ -4,10 +4,15 @@
 #include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
+#ifndef USE_MSNP_OBJSNP
 #include <slos.h>
 #include <sls.h>
 #include <sls_wal.h>
 #include <slsfs.h>
+#else
+#include <memsnap.h>
+#include <objsnap.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

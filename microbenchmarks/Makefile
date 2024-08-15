@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-all: checkpoint directio memsnap memsnap-old old sastrack wal
+all: checkpoint directio memsnap memsnap-old old sastrack wal memsnap-objsnap-combo
 
 checkpoint: checkpoint.c
 	clang -g -O2 -lpthread -lsls -o checkpoint checkpoint.c
@@ -19,6 +19,12 @@ memsnap-old: memsnap-old.c
 
 sastrack: sastrack.c
 	clang -g -O2 -lsls -o sastrack sastrack.c
+
+memsnap-objsnap-combo: sastrack.c
+	clang -g -O2 -losnap -lmsnp -DUSE_MSNP_OBJSNP -o memsnap-objsnap-combo sastrack.c
+
+objsnap: objsnap.c
+	clang -g -O2 -lmsnp -losnp -o memsnap memsnap.c
 
 wal: wal.c
 	clang -g -O2 -o wal wal.c

@@ -19,7 +19,7 @@
 [submodule "aurora-memsnap"]
 	path = aurora-memsnap
 	url = https://github.com/etsal/aurora.git
-	branch = memsnap
+	branch = memsnap-selfcontained
 [submodule "aurora-original"]
 	path = aurora-original
 	url = https://github.com/etsal/aurora.git

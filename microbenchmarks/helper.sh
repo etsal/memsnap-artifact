@@ -70,8 +70,13 @@ sfini()
 
 clean()
 {
-	ffini > /dev/null 2> /dev/null
+	pkill dtrace
+	wait 1
+
 	sfini > /dev/null 2> /dev/null
+	ffini > /dev/null 2> /dev/null
+	sfini_old > /dev/null 2> /dev/null
+	sfini_objsnap > /dev/null 2> /dev/null
 	zfini > /dev/null 2> /dev/null
 }
 
@@ -94,3 +99,18 @@ sfini_old()
 	gfini
 }
 
+sinit_objsnap()
+{
+	kldload objsnap
+	objinit /dev/$DISK
+	kldload memsnap
+	mount -t msnp msnp "/$MNT"
+
+}
+
+sfini_objsnap()
+{
+	umount "/$MNT"
+	kldunload memsnap
+	kldunload objsnap
+}

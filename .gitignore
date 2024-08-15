@@ -43,6 +43,8 @@ microbenchmarks/multisas
 microbenchmarks/old
 microbenchmarks/sastrack
 microbenchmarks/wal
+microbenchmarks/memsnap-objsnap-combo
+microbenchmarks/tmp
 
 **/*.swp
 **/appendonlydir
