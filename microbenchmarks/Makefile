@@ -30,4 +30,4 @@ wal: wal.c
 	clang -g -O2 -o wal wal.c
 
 clean:
-	rm -rf checkpoint directio memsnap old sastrack wal 
+	rm -rf checkpoint directio memsnap old sastrack wal memsnap-objsnap-combo

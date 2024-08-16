@@ -20,7 +20,11 @@
 
 #include "helper.h"
 
+#ifndef USE_MSNP_OBJSNP
 #define PATH ("/testmnt/sasfile")
+#else
+#define PATH ("/memsnap/sasfile")
+#endif
 
 #define DBSIZE (1024 * MB)
 #define ITERATIONS (100)

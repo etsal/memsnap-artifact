@@ -104,13 +104,14 @@ sinit_objsnap()
 	kldload objsnap
 	objinit /dev/$DISK >/dev/null 2>/dev/null
 	kldload memsnap
-	mount -t msnp msnp "/$MNT"
+	mkdir -p "/memsnap"
+	mount -t msnp msnp "/memsnap"
 
 }
 
 sfini_objsnap()
 {
-	umount "/$MNT"
+	umount "/memsnap"
 	kldunload memsnap
 	kldunload objsnap
 }
