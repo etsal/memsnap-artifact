@@ -2,7 +2,7 @@
 
 . helper.sh
 
-printf "IO Size\tAurora Full\tAurora Region\tMemSnap\n"
+printf "IO Size\tAurora Full\tAurora Region\tMemSnap\tMemSnap w/ Objsnap\n"
 for i in 1 16 1024; do
 	printf "%d KB\t" $(( $i * 4 ))
 	clean
@@ -35,6 +35,13 @@ for i in 1 16 1024; do
 
 	printf " & "
 
+	sinit_objsnap
+	sleep 1
+	./memsnap-objsnap-combo $(( $i * 4096 )) 
+	sleep 1
+	sfini_objsnap
+
+	printf " & "
 	printf "\\\\"
 
 	printf "\n"

@@ -22,7 +22,7 @@
 
 #define PATH ("/testmnt/sasfile")
 
-#define DBSIZE (256 * MB)
+#define DBSIZE (1024 * MB)
 #define ITERATIONS (100)
 
 int 

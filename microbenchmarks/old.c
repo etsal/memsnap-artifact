@@ -13,7 +13,7 @@
 #include "../aurora-original/include/sls.h"
 #include "helper.h"
 
-#define DBSIZE (256 * MB)
+#define DBSIZE (1024 * MB)
 #define ITERATIONS (1)
 #define OID (2358)
 

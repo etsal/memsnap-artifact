@@ -7,7 +7,6 @@
 
 #include "helper.h"
 
-#define NAME ("/dev/stripe/st0")
 #define ITERATIONS (1000)
 
 int
@@ -16,11 +15,12 @@ main(int argc, char *argv[])
 	struct timeval tstart, tend;
 	size_t transaction_size;
 	ssize_t ret;
+	char *name;
 	char *buf;
 	int fd;
 
-	if (argc != 2) {
-		fprintf(stderr, "./directio <TRANSACTION SIZE BYTES>\n");
+	if (argc != 3) {
+		fprintf(stderr, "./directio <TRANSACTION SIZE BYTES> <DISK SIZE>\n");
 		return (-1);
 	}
 
@@ -30,13 +30,15 @@ main(int argc, char *argv[])
 		return (-1);
 	}
 
+	name = argv[2];
+
 	buf = malloc(transaction_size);
 	if (buf == NULL) {
 		perror("malloc");
 		return (-1);
 	}
 
-	fd = open(NAME, O_RDWR);
+	fd = open(name, O_RDWR);
 	if (fd < 0) {
 		perror("open");
 		return (-1);

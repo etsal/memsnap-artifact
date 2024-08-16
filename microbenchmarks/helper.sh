@@ -102,7 +102,7 @@ sfini_old()
 sinit_objsnap()
 {
 	kldload objsnap
-	objinit /dev/$DISK
+	objinit /dev/$DISK >/dev/null 2>/dev/null
 	kldload memsnap
 	mount -t msnp msnp "/$MNT"
 

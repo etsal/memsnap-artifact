@@ -35,29 +35,34 @@ runmemsnap()
 	USE_OBJSNAP=$2
 	TMP=tmp
 
-	sinit_objsnap
-	./sastrack.d >$TMP 2>$TMP &
-
-	sleep 1
-
 	if [ $USE_OBJSNAP = "yes" ]; then
-		./memsnap-objsnap-combo $SIZE > /dev/null
+		INIT=sinit_objsnap
+		FINI=sfini_objsnap
+		WORKLOAD=memsnap-objsnap-combo 
 	else
-		./sastrack $SIZE  > /dev/null
+		INIT=sinit
+		FINI=sfini
+		WORKLOAD=sastrack
 	fi
 
-	RESULT=`cat $TMP | grep "Resetting tracking" | tr -s ' ' #| cut -d ' ' -f 3`
-	#RESULT=$(( $RESULT / 1000 ))
-	printf "%d us\t" $RESULT
+	$INIT
+
+	./sastrack.d >$TMP 2>$TMP &
+
+	./$WORKLOAD $SIZE >/dev/null 2>/dev/null
 
 	kill %1
 	wait %1
 
-	sfini_objsnap
+	RESULT=`cat $TMP | grep "Resetting tracking" | tr -s ' ' | cut -d ' ' -f 4`
+	RESULT=`echo "scale=1; $RESULT / 1000" | bc`
+	printf "%s ns\t" $RESULT
+
+	$FINI
 }
 
 printf "IO Size\tAurora Region\tMemSnap w/o Trace\tMemSnap (Aurora)\tMemSnap (SAS)\tMemSnap (ObjSnap)\n"
-for i in 1 1024; do
+for i in 1 64 1024; do
 	printf "%d KB\t" $(( $i * 4 ))
 	clean
 

@@ -2,7 +2,7 @@
 
 . helper.sh
 
-printf "IO Size\tDirect IO\tSerial FFS\tSerial ZFS\tCheckpoint FFS\tCheckpoint ZFS\tMemsnap sync\tMemsnap async\n"
+printf "IO Size\tDirect IO\tSerial FFS\tSerial ZFS\tCheckpoint FFS\tCheckpoint ZFS\tMemsnap sync\tMemsnap async\tMemsnap w/ Objsnap\n"
 for i in 1 2 4 8 16 32 64 128 256 512 1024; do
 	printf "%d KB\t" $(( $i * 4 ))
 	clean
@@ -10,7 +10,7 @@ for i in 1 2 4 8 16 32 64 128 256 512 1024; do
 	sysctl aurora.tracebuf=1 >/dev/null 2>/dev/null
 
 	ginit
-	./directio $(( i * 4096 )) $DISK
+	./directio $(( i * 4096 )) $SPATH
 	gfini
 
 	printf " & "
@@ -54,6 +54,14 @@ for i in 1 2 4 8 16 32 64 128 256 512 1024; do
 	sleep 1
 	sysctl aurora_slos.sas_commit_async=0 >/dev/null 2>/dev/null
 	sfini
+
+	printf " & "
+
+	sinit_objsnap
+	sleep 1
+	./memsnap-objsnap-combo $(( $i * 4096 )) 
+	sleep 1
+	sfini_objsnap
 
 	printf " & "
 
