@@ -118,8 +118,8 @@ sqliteutil_run_dbbench()
     TEARDOWN_FUNC="$3"
     CMDLINE="$4"
     DTRACESCRIPT="$5"
+    EXECNAME="$6"
     TMP="/tmp/out"
-    EXECNAME="db_bench_sqlite3"
 
     CMD="$EXECNAME $CMDLINE 2> $TMP | tee $TMP"
 
@@ -151,7 +151,7 @@ sqliteutil_filecopy()
 	cp auroravfs/auroravfs.so $FSMNT/lib/auroravfs.so
 	cp auroravfs/auroravfs-objsnap.so $FSMNT/lib/auroravfs-objsnap.so
 	cp db_bench/db_bench $FSMNT/sbin/db_bench_sqlite3
-	cp db_bench/db_bench_objsnap $FSMNT/sbin/db_bench_objsnap_sqlite3
+	cp db_bench/db_bench_objsnap $FSMNT/sbin/objsnap_sqlite3
 	cp tatp/build/tatp/tatp_sqlite3 $FSMNT/sbin/tatp_sqlite3
 	cp tatp/build/tatp/tatp_sqlite3_objsnap $FSMNT/sbin/objsnap_tatp
 }

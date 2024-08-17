@@ -32,7 +32,7 @@ sqlite_walsize()
 {
     BATCH_SIZE=$1
     BENCHMARK=$2
-    SLS_ENABLED=$3
+    STORAGE=$3
 
     OID=1600
     DB_SIZE=256
@@ -41,18 +41,27 @@ sqlite_walsize()
     OPERATIONS=$(( 2 * 1024 * 1024 ))
     KEYS=$(( 1024 * 1024 ))
 
-    if [ ! -z $SLS_ENABLED ]; then
+    if [ $STORAGE = "SLSFS" ]; then 
     	CONFIG="sls-batch-$BATCH_SIZE-$BENCHMARK"
 	SETUP_FUNC=sqliteutil_no_op
 	TEARDOWN_FUNC=sqlite_slsdb_teardown
     	WAL_ENABLED=0
 	DTRACESCRIPT="$PWD/sqlite-sls.d"
-    else
+    elif [ $STORAGE = "ZFS" ]; then 
     	CONFIG="baseline-batch-$BATCH_SIZE-$BENCHMARK"
 	SETUP_FUNC=sqliteutil_no_op
 	TEARDOWN_FUNC=sqlite_batch_teardown
     	WAL_ENABLED=1
 	DTRACESCRIPT="$PWD/sqlite-baseline.d"
+    elif [ $STORAGE = "OBJSNAP" ]; then
+    	CONFIG="objsnap-batch-$BATCH_SIZE-$BENCHMARK"
+	SETUP_FUNC=sqliteutil_no_op
+	TEARDOWN_FUNC=sqlite_slsdb_teardown
+    	WAL_ENABLED=0
+	DTRACESCRIPT="$PWD/sqlite-sls.d"
+    else
+	echo "ERROR: Invalid storage option $STORAGE"
+	exit 1
     fi
 
     CMDOPTIONS="--benchmarks=$BENCHMARK \
@@ -68,23 +77,36 @@ sqlite_walsize()
 	     --raw=1 \
 	     --value_size=$VALUE_SIZE"
 
-    if [ ! -z $SLS_ENABLED ]; then
+    BINARY="db_bench_sqlite3"
+    if [ $STORAGE = "SLSFS" ]; then
+	    CMDOPTIONS="$CMDOPTIONS --extension=auroravfs --oid=$OID"
+    elif [ $STORAGE = "OBJSNAP" ]; then
+            BINARY="objsnap_sqlite3"
 	    CMDOPTIONS="$CMDOPTIONS --extension=auroravfs --oid=$OID"
     fi
     
-    sqliteutil_run_dbbench "$CONFIG" "$SETUP_FUNC" "$TEARDOWN_FUNC" "$CMDOPTIONS" "$DTRACESCRIPT"
+    sqliteutil_run_dbbench "$CONFIG" "$SETUP_FUNC" "$TEARDOWN_FUNC" "$CMDOPTIONS" "$DTRACESCRIPT" "$BINARY"
 }
 
 #==============MAIN==============
 
-NAME="artifact"
+NAME="$1"
 sqliteutil_preamble
 
 gstripe create $CKPTSTRIPE $CKPTDISKS
 for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
     for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
+	    sqliteutil_setup_objsnap
+	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" "OBJSNAP" 
+	    sqliteutil_teardown_objsnap
+    done
+done
+
+for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
+    for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
+    	    BENCHMARK="fillseqbatch"
 	    sqliteutil_aursetup "sls"
-	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" "YES" 
+	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" "SLSFS" 
 	    sqliteutil_aurteardown
     done
 done
@@ -92,8 +114,9 @@ gstripe destroy $CKPTSTRIPE
 
 for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
     for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
+    	    BENCHMARK="fillseqbatch"
 	    sqliteutil_setup_zfs
-	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" ""
+	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" "ZFS"
 	    sqliteutil_teardown_zfs
     done
 done
