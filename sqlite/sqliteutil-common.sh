@@ -78,6 +78,39 @@ sqliteutil_runbenchmark()
     done
 }
 
+sqliteutil_testrun()
+{
+    CONFIG="$1"
+    SETUP_FUNC="$2"
+    TEARDOWN_FUNC="$3"
+    CMD="$4"
+    TMP="$5"
+    DTRACESCRIPT="$6"
+    EXECNAME="$7"
+    DIR="$OUT/sqlite/$CONFIG"
+    FSMNT=$MNT
+    ITER="$1"
+
+
+    echo "[Aurora `date +'%T'`] Running sqlite: $CONFIG, Iteration $ITER"
+    
+    echo "$CMD" 
+    
+    chroot $MNT /bin/sh -c "$CMD" &
+    FUNC_PID="$!"
+    sleep 1
+    
+    $SETUP_FUNC $FUNC_PID
+    
+    wait $FUNC_PID
+    if [ $? -eq 124 ];then
+    	echo "[Aurora `date +'%T'`] Issue with benchmark, restart required"
+    	exit 1
+    fi
+
+    $TEARDOWN_FUNC $DIR "ITER"
+}
+
 sqliteutil_run_dbbench()
 {
     CONFIG="$1"
@@ -100,8 +133,8 @@ sqliteutil_run_tatp()
     TEARDOWN_FUNC="$3"
     CMDLINE="$4"
     DTRACESCRIPT="$5"
+    EXECNAME="$6"
     TMP="/tmp/out"
-    EXECNAME="tatp_sqlite3 "
 
     CMD="$EXECNAME $CMDLINE 2> $TMP | tee $TMP"
 
@@ -113,10 +146,14 @@ sqliteutil_filecopy()
 	FSMNT=$1
 
 	mkdir -p $FSMNT/usr/local/lib
+	mkdir -p $FSMNT/memsnap
 
 	cp auroravfs/auroravfs.so $FSMNT/lib/auroravfs.so
+	cp auroravfs/auroravfs-objsnap.so $FSMNT/lib/auroravfs-objsnap.so
 	cp db_bench/db_bench $FSMNT/sbin/db_bench_sqlite3
+	cp db_bench/db_bench_objsnap $FSMNT/sbin/db_bench_objsnap_sqlite3
 	cp tatp/build/tatp/tatp_sqlite3 $FSMNT/sbin/tatp_sqlite3
+	cp tatp/build/tatp/tatp_sqlite3_objsnap $FSMNT/sbin/objsnap_tatp
 }
 
 sqliteutil_aursetup()
@@ -159,6 +196,22 @@ sqliteutil_teardown_ffs()
 	util_teardown_ffs $MNT
 }
 
+sqliteutil_setup_objsnap()
+{
+	mdconfig -u $OBJSNAP_MD_NUM -a -s $OBJSNAP_MD_SIZE -t "swap"
+	util_setup_ffs $MNT $OBJSNAP_MD_PATH
+	util_setup_root $MNT
+	sqliteutil_filecopy $MNT
+	util_setup_objsnap $MNT $DISKPATH
+}
+
+sqliteutil_teardown_objsnap()
+{
+	util_teardown_objsnap $MNT
+	util_teardown_ffs $MNT
+	mdconfig -u $OBJSNAP_MD_NUM -d >/dev/null 2>/dev/null
+}
+
 sqliteutil_preamble()
 {
 	clear_log
@@ -173,8 +226,12 @@ sqliteutil_preamble()
 	rm -r $OUT/sqlite
 	mkdir -p $OUT/sqlite
 
+	# Destroy any memory disks we may have created
+	mdconfig -d -u $OBJSNAP_MD_NUM >/dev/null 2>/dev/null
+
 	# Clean up previous setups
-	sqliteutil_teardown_aurora > /dev/null 2> /dev/null
+	sqliteutil_teardown_objsnap > /dev/null 2> /dev/null
+	sqliteutil_aurteardown > /dev/null 2> /dev/null
 	sqliteutil_teardown_zfs > /dev/null 2> /dev/null
 	sqliteutil_teardown_ffs > /dev/null 2> /dev/null
 	gstripe load

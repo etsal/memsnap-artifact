@@ -67,6 +67,8 @@ util_setup_aurora()
 	INFREQUENT=$(( 10 * 1000 ))
 
 	echo "[Aurora `date +'%T'`] Loading the Aurora module"
+	# XXX Port these over from aurora-memsnap/tests/aurora, this file should
+	# be self-contained
 	MNT=$FSMNT aurteardown > $LOG 2> $LOG
 	MNT=$FSMNT aursetup
 
@@ -116,6 +118,28 @@ util_setup_zfs()
 	mount -t devfs devfs $FSMNT/dev
 	mount -t fdescfs fdesc $FSMNT/dev/fd
 	mount -t procfs proc $FSMNT/proc
+}
+
+util_setup_objsnap()
+{
+	MNT=$1
+	OBJDISK=$2
+
+	kldload objsnap
+	objinit "$OBJDISK"
+
+	kldload memsnap
+	mkdir -p "$MNT/memsnap"
+	mount -t msnp msnp "$MNT/memsnap"
+}
+
+util_teardown_objsnap()
+{
+	MSNPMNT=$1
+
+	umount "$MNT/memsnap"
+	kldunload memsnap
+	kldunload objsnap
 }
 
 util_teardown_zfs()
