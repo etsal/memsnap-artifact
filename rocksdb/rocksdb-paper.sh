@@ -35,6 +35,7 @@ rocksdb_slsdb()
 	--full_checkpoint=$FULLCHECKPOINT \
 	--ignore_wal=false"
 
+    echo "HERE"
     rocksutil_runbenchmark "$CONFIG" "$CMDLINE" "$DTRACESCRIPT"
 }
 
@@ -76,19 +77,22 @@ NAME=artifact
 rocksutil_preamble
 
 gstripe create $CKPTSTRIPE $CKPTDISKS
+rocksutil_objsetup $MNT "/dev/stripe/$CKPTSTRIPE"
+rocksdb_slsdb "objsnap" 
+rocksutil_objteardown $MNT
+
 rocksutil_aursetup $MNT 
 rocksdb_slsdb "slsdb" 
 rocksutil_aurteardown $MNT
+
+rocksutil_regionsetup $MNT
+rocksdb_slsdb "aurora"
+rocksutil_regionteardown $MNT
+
 gstripe destroy $CKPTSTRIPE
 
 rocksdb_setup_zfs
 rocksdb_compact "compact"
 rocksdb_teardown_zfs
-
-gstripe create $CKPTSTRIPE $CKPTDISKS
-rocksutil_regionsetup $MNT
-rocksdb_slsdb "aurora"
-rocksutil_regionteardown $MNT
-gstripe destroy $CKPTSTRIPE
 
 rocksutil_epilogue

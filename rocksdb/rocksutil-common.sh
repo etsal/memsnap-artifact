@@ -52,6 +52,28 @@ rocksutil_runbenchmark()
     
 }
 
+rocksutil_testrun()
+{
+    CONFIG="$1"
+    CMDLINE="$2"
+    DTRACESCRIPT="$3"
+    DIR="$OUT/rocksdb/$CONFIG"
+    EXECNAME="db_bench"
+    ITER=0
+
+    echo "$EXECNAME $CMDLINE"
+
+    chroot $AURMNT /bin/sh -c "$EXECNAME $CMDLINE | tee > $TMP 2> $TMP " &
+    FUNC_PID="$!"
+    
+    wait $FUNC_PID
+    if [ $? -eq 124 ];then
+    	echo "[Aurora `date +'%T'`] Issue with db_bench, restart required"
+    	exit 1
+    fi
+}
+
+
 rocksutil_filecopy()
 {
 	BUILDDIR=$1
@@ -59,6 +81,26 @@ rocksutil_filecopy()
 
 	cp -r rocksdb/$BUILDDIR/librocksdb.so* $AURMNT/lib
 	cp rocksdb/$BUILDDIR/db_bench $AURMNT/sbin/db_bench
+}
+
+rocksutil_objsetup()
+{
+	OBJMNT=$1
+	OBJDISK=$2
+
+	util_setup_objsnap $OBJMNT $OBJDISK
+
+	util_setup_root $OBJMNT
+	rocksutil_filecopy "objsnap" $OBJMNT
+
+	echo "Setup done"
+}
+
+rocksutil_objteardown()
+{
+	AURMNT=$1
+
+	util_teardown_objsnap $AURMNT
 }
 
 rocksutil_aursetup()

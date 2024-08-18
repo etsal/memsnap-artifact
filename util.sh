@@ -122,22 +122,22 @@ util_setup_zfs()
 
 util_setup_objsnap()
 {
-	MNT=$1
+	MSNPMNT=$1
 	OBJDISK=$2
 
 	kldload objsnap
 	objinit "$OBJDISK"
 
 	kldload memsnap
-	mkdir -p "$MNT/memsnap"
-	mount -t msnp msnp "$MNT/memsnap"
+	mkdir -p "$MSNPMNT/memsnap"
+	mount -t msnp msnp "$MSNPMNT/memsnap"
 }
 
 util_teardown_objsnap()
 {
 	MSNPMNT=$1
 
-	umount "$MNT/memsnap"
+	umount "$MSNPMNT/memsnap"
 	kldunload memsnap
 	kldunload objsnap
 }

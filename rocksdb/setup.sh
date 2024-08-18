@@ -48,6 +48,7 @@ rocksdb_setup()
     rocksdb_compile "$PWD" "slsdb-beta2" "slsdb" $SRCROOT
     rocksdb_compile "$PWD" "slsdb-region2" "sls" $SRCROOT
     rocksdb_compile "$PWD" "sls-baseline2" "baseline" $SRCROOT
+    rocksdb_compile "$PWD" "slsdb-objsnap" "objsnap" $SRCROOT
 }
 
 check_dependencies
