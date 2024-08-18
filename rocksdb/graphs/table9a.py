@@ -61,8 +61,8 @@ def fill_config(datadir):
 def metrics(datadir):
     data = fill_config(datadir)
 
-    titles = ["\code{memsnap}", "Baseline+WAL", "\code{Aurora}"]
-    confs = ["slsdb", "compact", "aurora"]
+    titles = ["\code{memsnap}", "Baseline+WAL", "\code{Aurora}", "\code{ObjSnap}"]
+    confs = ["slsdb", "compact", "aurora", "objsnap"]
     for (conf, title) in zip(confs, titles):
         print(r"{\bf " + title + "} & ", end="")
         (kops, avg, tail) = data[conf]
@@ -74,9 +74,9 @@ def metrics(datadir):
 
 
 def header():
-    print(r"\begin{tabular}{@{} c | c c c @{}}")
+    print(r"\begin{tabular}{@{} c | c c c c @{}}")
     print(r"\toprule")
-    print(r"&  \multicolumn{3}{c}{Metric} \\")
+    print(r"&  \multicolumn{4}{c}{Metric} \\")
     print(r"{\bf Configuration} & {\bf Kops/s} & {\bf Avg(us)} & {\bf 99th(us)}\\ ")
     print(r"\midrule")
 

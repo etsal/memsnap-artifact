@@ -13,13 +13,13 @@ def sqlite_iter(valuefile):
         line = f.readline()
         return round(float(line.strip()))
 
-def report_metrics(keys, basenums, slsnums):
+def report_metrics(keys, basenums, slsnums, objnums):
     fig, ax = plt.subplots(1, 1)
 
     width = 0.25
     x = np.arange(len(keys))
 
-    for i , (label, color, vals) in enumerate([("baseline", "orange", basenums), ("memsnap", "blue", slsnums)]):
+    for i , (label, color, vals) in enumerate([("baseline", "orange", basenums), ("memsnap", "blue", slsnums), ("objsnap", "grey", objnums)]):
         offset = width * i
         rects = ax.bar(x + offset, vals, width, label=label, color=color)
         #ax.bar_label(rects, padding = 3)
@@ -33,7 +33,7 @@ def report_metrics(keys, basenums, slsnums):
     ax.legend(fontsize=6, loc="upper right")
     ax.set_ylim(ymin=0, ymax=100000)
 
-    fig.set_size_inches(3.6, 2.4)
+    fig.set_size_inches(36, 24)
     fig.tight_layout()
     fig.savefig(Path.cwd() / "pgfs" / "figure4.png")
 
@@ -54,12 +54,16 @@ def fill_config(datadir, name):
 def sqlite_graph(datadir):
     confbase = fill_config(datadir, "baseline")
     confsls = fill_config(datadir, "sls")
+    confobjsnap = fill_config(datadir, "objsnap")
+
     conf = dict()
     keys = sorted(confbase.keys())
+
     basenums = [ confbase[x] for x in keys ]
     slsnums = [ confsls[x] for x in keys ]
+    objsnapnums = [ confobjsnap[x] for x in keys ]
 
-    report_metrics(keys, basenums, slsnums)
+    report_metrics(keys, basenums, slsnums, objsnapnums)
 
 if __name__ == "__main__":
     sqlite_graph(Path.cwd() / "tatp")

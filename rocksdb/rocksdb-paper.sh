@@ -35,7 +35,6 @@ rocksdb_slsdb()
 	--full_checkpoint=$FULLCHECKPOINT \
 	--ignore_wal=false"
 
-    echo "HERE"
     rocksutil_runbenchmark "$CONFIG" "$CMDLINE" "$DTRACESCRIPT"
 }
 

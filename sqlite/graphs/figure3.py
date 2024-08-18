@@ -64,9 +64,9 @@ def fill_config(datadir, name):
     return config
 
 
-def generate_metric(path, xvals, sls, slsstd, baseline, basestd, legend, si):
-    fig, ax = plt.subplots(1, 1, figsize=(1.8, 1.4))
-    colors = ["orange", "blue"]
+def generate_metric(path, xvals, sls, slsstd, baseline, basestd, obj, objstd, legend, si):
+    fig, ax = plt.subplots(1, 1, figsize=(18, 14))
+    colors = ["orange", "blue", "grey"]
 
     for tick in ax.get_xticklabels():
         tick.set_rotation(6)
@@ -82,9 +82,11 @@ def generate_metric(path, xvals, sls, slsstd, baseline, basestd, legend, si):
     if slsstd:
         ax.errorbar(xaxis, sls, yerr=slsstd, label="MemSnap", color=colors[1])
         ax.errorbar(xaxis, baseline, yerr=basestd, label="Baseline", color=colors[0])
+        ax.errorbar(xaxis, obj, yerr=objstd, label="ObjSnap", color=colors[2])
     else:
         ax.plot(xaxis, sls, label="MemSnap", color=colors[1])
         ax.plot(xaxis, baseline, label="Baseline", color=colors[0])
+        ax.plot(xaxis, obj, label="ObjSnap", color=colors[0])
 
     ax.set_ylabel("Latency ({})".format(si), fontsize=9)
     ax.set_xlabel("Transaction Size (KiB)", fontsize=9)
@@ -103,38 +105,45 @@ def generate_metric(path, xvals, sls, slsstd, baseline, basestd, legend, si):
 def metrics_pgf(bench):
     confbase = fill_config(Path.cwd() / bench, "baseline")
     confsls = fill_config(Path.cwd() / bench, "sls")
+    confobj = fill_config(Path.cwd() / bench, "objsnap")
 
     xvals = sorted(map(int, confsls.keys()))
     stdindex = metrics.index("stddev")
     slsstddev = [ confsls[str(xval)][stdindex] / 1000 for xval in xvals ]
     basestddev = [ confbase[str(xval)][stdindex] / 1000 for xval in xvals ]
+    objstddev = [ confobj[str(xval)][stdindex] / 1000 for xval in xvals ]
 
     slsstddevnormalized = [ confsls[str(xval)][stdindex] / xval for xval in xvals ]
     basestddevnormalized = [ confbase[str(xval)][stdindex] / xval for xval in xvals ]
+    objstddevnormalized = [ confobj[str(xval)][stdindex] / xval for xval in xvals ]
 
     for metric in [ "avg", "99th" ]:
         index = metrics.index(metric)
         sls = [ confsls[str(xval)][index] / 1000 for xval in xvals ]
         base = [ confbase[str(xval)][index] / 1000 for xval in xvals ]
+        obj = [ confobj[str(xval)][index] / 1000 for xval in xvals ]
 
         slsstd = slsstddev if metric == "avg" else None
         basestd = basestddev if metric == "avg" else None
+        objstd = objstddev if metric == "avg" else None
         
         legend = bench == "fillrandbatch" and metric == "avg"
         path = Path.cwd() / "pgfs" / "eval-total-{}-{}".format(bench, metric)
         si = "ms"
-        generate_metric(path, xvals, sls, slsstd, base, basestd, legend, si)
+        generate_metric(path, xvals, sls, slsstd, base, basestd, obj, objstd, legend, si)
 
         sls = [ confsls[str(xval)][index] / xval for xval in xvals ]
         base = [ confbase[str(xval)][index] / xval for xval in xvals ]
+        obj = [ confobj[str(xval)][index] / xval for xval in xvals ]
 
         slsstd = slsstddevnormalized if metric == "avg" else None
         basestd = basestddevnormalized  if metric == "avg" else None
+        objstd = objstddevnormalized  if metric == "avg" else None
 
         legend = False
         path = Path.cwd() / "pgfs" / "eval-normalized-{}-{}".format(bench, metric)
         print(path)
-        generate_metric(path, xvals, sls, slsstd, base, basestd, legend, si)
+        generate_metric(path, xvals, sls, slsstd, base, basestd, obj, objstd, legend, si)
 
 if __name__ == "__main__":
     for bench in [ "fillrandbatch", "fillseqbatch" ]:
