@@ -30,10 +30,10 @@ wal: wal.c
 	clang -g -O2 -o wal wal.c
 
 parallel-sastrack: parallel.c
-	clang -g -O2 -lsls -o parallel-sastrack parallel.c
+	clang -g -O2 -lpthread -lsls -o parallel-sastrack parallel.c
 
 parallel-combo: parallel.c
-	clang -g -O2 -losnap -lmsnp -DUSE_MSNP_OBJSNP -o parallel-combo parallel.c
+	clang -g -O2 -lpthread -losnap -lmsnp -DUSE_MSNP_OBJSNP -o parallel-combo parallel.c
 
 
 clean:

@@ -2,9 +2,9 @@
 
 . helper.sh
 
-printf "IO Size\tMemsnap\tMemsnap w/ Objsnap\n"
-for i in 1 2 4 8 16 32 64 128 256 512 1024; do
-	printf "%d KB\t" $(( $i * 4 ))
+printf "Threads\tMemsnap\tMemsnap w/ Objsnap\n"
+for i in `seq 1 1 12`; do
+	printf "%d\t" $i
 
 	printf " & "
 
@@ -14,7 +14,7 @@ for i in 1 2 4 8 16 32 64 128 256 512 1024; do
 
 	sinit
 	sleep 1
-	./parallel-sastrack $(( $i * 4096 )) 
+	./parallel-sastrack $i
 	sleep 1
 	sfini
 
@@ -22,7 +22,7 @@ for i in 1 2 4 8 16 32 64 128 256 512 1024; do
 
 	sinit_objsnap
 	sleep 1
-	./parallel-combo $(( $i * 4096 )) 
+	./parallel-combo $i
 	sleep 1
 	sfini_objsnap
 
