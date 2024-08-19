@@ -47,6 +47,7 @@ microbenchmarks/memsnap-objsnap-combo
 microbenchmarks/tmp
 microbenchmarks/parallel-combo
 microbenchmarks/parallel-sastrack
+microbenchmarks/objsnap
 
 **/*.swp
 **/appendonlydir

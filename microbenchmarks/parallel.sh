@@ -2,7 +2,7 @@
 
 . helper.sh
 
-printf "Threads\tMemsnap\tMemsnap w/ Objsnap\n"
+printf "Threads\tMemsnap\tMemsnap w/ Objsnap\tObjsnap\n"
 for i in `seq 1 1 12`; do
 	printf "%d\t" $i
 
@@ -28,6 +28,13 @@ for i in `seq 1 1 12`; do
 
 	printf " & "
 
+	sinit_objsnap
+	sleep 1
+	./objsnap $i
+	sleep 1
+	sfini_objsnap
+
+	printf " & "
 	printf "\\\\"
 
 	printf "\n"
