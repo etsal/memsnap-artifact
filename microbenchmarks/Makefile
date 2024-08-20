@@ -36,4 +36,4 @@ objsnap: objsnap.c
 	clang -g -O2 -lpthread -losnap -o objsnap objsnap.c
 
 clean:
-	rm -rf checkpoint directio memsnap old sastrack wal memsnap-objsnap-combo objsnap
+	rm -rf checkpoint directio memsnap old sastrack wal memsnap-objsnap-combo objsnap paralel-sastrack parallel-combo
