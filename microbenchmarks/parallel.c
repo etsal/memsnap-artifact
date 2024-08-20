@@ -27,8 +27,8 @@
 #define PATH ("/memsnap/sasfile")
 #endif
 
-#define CKPT_SIZE (64 * KB)
-#define SLICESIZE (128 * MB)
+#define CKPT_SIZE (16 * KB)
+#define SLICESIZE (16 * MB)
 #define ITERATIONS (100)
 
 size_t total_latency = 0;
@@ -137,13 +137,13 @@ main(int argc, char **argv)
 	for (i = 0; i < numthreads; i++)
 		pthread_join(threads[i], NULL);
 
-	stats(total_latency / (numthreads * ITERATIONS), CKPT_SIZE);
-	
 	error = sas_trace_end(fd);
 	if (error != 0) {
 		printf("sas_trace_end failed\n");
 		exit(1);
 	}
+
+	stats(total_latency / (numthreads * ITERATIONS), CKPT_SIZE);
 
 	return (0);
 }

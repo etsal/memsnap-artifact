@@ -15,8 +15,8 @@
 
 #define PATH ("/memsnap/sasfile")
 
-#define CKPT_SIZE (64 * KB)
-#define SLICESIZE (128 * MB)
+#define CKPT_SIZE (16 * KB)
+#define SLICESIZE (16 * MB)
 #define ITERATIONS (100)
 
 size_t total_latency = 0;
