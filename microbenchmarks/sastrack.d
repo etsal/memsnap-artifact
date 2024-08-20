@@ -6,31 +6,31 @@ int tsstart, tsprotect, tswrite, tsblock, tsend;
 
 sas:::start
 {
-	tsstart = timestamp;
+	self->tsstart = timestamp;
 }
 
 sas:::protect
 {
-	tsprotect = timestamp;
-	@tavg["Resetting tracking"] = avg(tsprotect - tsstart);
+	self->tsprotect = timestamp;
+	@tavg["Resetting tracking"] = avg(self->tsprotect - self->tsstart);
 }
 
 sas:::write
 {
-	tswrite = timestamp;
-	@tavg["Initiating Writes"] = avg(tswrite - tsprotect);
+	self->tswrite = timestamp;
+	@tavg["Initiating Writes"] = avg(self->tswrite - self->tsprotect);
 }
 
 sas:::block
 {
-	tsblock = timestamp;
-	@tavg["Waiting on IO"] = avg(tsblock - tswrite);
+	self->tsblock = timestamp;
+	@tavg["Waiting on IO"] = avg(self->tsblock - self->tswrite);
 }
 
 fbt::slsfs_sas_trace_commit:return
 {
-	tsend = timestamp;
-	@tavg["Total"] = avg(tsend - tsstart);
+	self->tsend = timestamp;
+	@tavg["Total"] = avg(self->tsend - self->tsstart);
 }
 
 END
