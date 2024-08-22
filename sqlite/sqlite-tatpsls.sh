@@ -53,15 +53,15 @@ sqlite_tatp()
 
 #==============MAIN==============
 
-NAME="$1"
+NAME="artifact"
 sqliteutil_preamble 
 
 gstripe create $CKPTSTRIPE $CKPTDISKS
-#for NUM_RECORDS in 1000 10000 100000 1000000; do
-#	sqliteutil_setup_objsnap
-#	sqlite_tatp $NUM_RECORDS "OBJSNAP"
-#	sqliteutil_teardown_objsnap
-#done
+for NUM_RECORDS in 1000 10000 100000 1000000; do
+	sqliteutil_setup_objsnap
+	sqlite_tatp $NUM_RECORDS "OBJSNAP"
+	sqliteutil_teardown_objsnap
+done
 
 for NUM_RECORDS in 1000 10000 100000 1000000; do
 	sqliteutil_aursetup "sls"
