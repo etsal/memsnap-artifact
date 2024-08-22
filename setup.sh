@@ -31,7 +31,7 @@ mkdir -p /usr/freebsd-dist
 mv base.txz /usr/freebsd-dist
 
 rmdir /usr/src;
-git clone https://github.com/rcslab/aurora-12.3.git /usr/src
+git clone --branch aurora https://github.com/rcslab/aurora-12.3.git /usr/src
 
 mkdir -p /usr/lib/debug/boot/modules/
 mkdir -p /usr/aurora/tests/posix/
