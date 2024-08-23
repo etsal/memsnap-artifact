@@ -6,7 +6,7 @@ int memsnap_start;
 fbt::slsfs_sas_trace_commit:entry
 {
     self->start = timestamp;
-    @tcnt["memsnap-count"] = count()
+    @tcnt["memsnap-count"] = count();
 }
 
 fbt::slsfs_sas_trace_commit:return
