@@ -90,15 +90,15 @@ sqlite_walsize()
 
 #==============MAIN==============
 
-NAME="$1"
+NAME="artifact"
 sqliteutil_preamble
 
 gstripe create $CKPTSTRIPE $CKPTDISKS
 for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
     for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
-	    sqliteutil_setup_objsnap
-	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" "OBJSNAP" 
-	    sqliteutil_teardown_objsnap
+           sqliteutil_setup_objsnap
+           sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" "OBJSNAP"
+           sqliteutil_teardown_objsnap
     done
 done
 
