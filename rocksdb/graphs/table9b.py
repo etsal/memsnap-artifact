@@ -52,7 +52,7 @@ def toSI(value):
 
 def dtrace(datadir):
     data = fill_config(datadir)
-    ops = ["memsnap", "fsync", "write", "checkpoint"]
+    ops = ["objsnap", "memsnap", "fsync", "write", "checkpoint"]
     for op in ops:
 
         print(r"{\bf \code{" + str(op) + "} } & ", end="")

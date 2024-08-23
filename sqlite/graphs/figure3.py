@@ -12,7 +12,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 import numpy as np
-matplotlib.rcParams.update({'font.size': 9})
+matplotlib.rcParams.update({'font.size': 18})
 matplotlib.rcParams.update({'font.serif': "Times"})
 
 metrics = ["min", "50th", "90th", "99th", "avg", "stddev" ]
@@ -65,18 +65,18 @@ def fill_config(datadir, name):
 
 
 def generate_metric(path, xvals, sls, slsstd, baseline, basestd, obj, objstd, legend, si):
-    fig, ax = plt.subplots(1, 1, figsize=(18, 14))
+    fig, ax = plt.subplots(1, 1, figsize=(9, 6))
     colors = ["orange", "blue", "grey"]
 
     for tick in ax.get_xticklabels():
         tick.set_rotation(6)
         tick.set_rotation(45)
-        tick.set_size(6)
+        tick.set_size(12)
     for tick in ax.get_yticklabels():
         tick.set_rotation(45)
-        tick.set_size(6)
-    ax.xaxis.label.set_size(6)
-    ax.yaxis.label.set_size(6)
+        tick.set_size(12)
+    ax.xaxis.label.set_size(12)
+    ax.yaxis.label.set_size(12)
 
     xaxis = [str(x) for x in map(lambda x: x * 4, xvals)]
     if slsstd:
@@ -86,18 +86,17 @@ def generate_metric(path, xvals, sls, slsstd, baseline, basestd, obj, objstd, le
     else:
         ax.plot(xaxis, sls, label="MemSnap", color=colors[1])
         ax.plot(xaxis, baseline, label="Baseline", color=colors[0])
-        ax.plot(xaxis, obj, label="ObjSnap", color=colors[0])
+        ax.plot(xaxis, obj, label="ObjSnap", color=colors[2])
 
-    ax.set_ylabel("Latency ({})".format(si), fontsize=9)
-    ax.set_xlabel("Transaction Size (KiB)", fontsize=9)
+    ax.set_ylabel("Latency ({})".format(si), fontsize=18)
+    ax.set_xlabel("Transaction Size (KiB)", fontsize=18)
     if legend:
-        ax.legend(ncol=2, fontsize=6, bbox_to_anchor=(0.99, 0.98), bbox_transform=fig.transFigure)
+        ax.legend(ncol=2, fontsize=12, bbox_to_anchor=(0.99, 0.98), bbox_transform=fig.transFigure)
 
     _, top = ax.get_ylim()
     top = 10 ** (math.ceil(math.log10(top)))
     ax.set_ylim((1, top))
     ax.set_yscale("log")
-
     fig.tight_layout()
     fig.savefig("{}.png".format(path))
 
@@ -127,7 +126,7 @@ def metrics_pgf(bench):
         basestd = basestddev if metric == "avg" else None
         objstd = objstddev if metric == "avg" else None
         
-        legend = bench == "fillrandbatch" and metric == "avg"
+        legend = True
         path = Path.cwd() / "pgfs" / "eval-total-{}-{}".format(bench, metric)
         si = "ms"
         generate_metric(path, xvals, sls, slsstd, base, basestd, obj, objstd, legend, si)
@@ -140,9 +139,8 @@ def metrics_pgf(bench):
         basestd = basestddevnormalized  if metric == "avg" else None
         objstd = objstddevnormalized  if metric == "avg" else None
 
-        legend = False
+        legend = True
         path = Path.cwd() / "pgfs" / "eval-normalized-{}-{}".format(bench, metric)
-        print(path)
         generate_metric(path, xvals, sls, slsstd, base, basestd, obj, objstd, legend, si)
 
 if __name__ == "__main__":

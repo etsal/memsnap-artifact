@@ -47,28 +47,33 @@ def dtrace(datadir):
     data = fill_config(datadir)
     aurora = data["aurora"] 
     memsnap = data["slsdb"]
+    objsnap = data["objsnap"]
     descriptions = [ "Waiting for Calls", "Applying COW", "Flush IO", "Removing COW", "Total"]
     aurora_results = [ aurora["enter"], aurora["cow"], aurora["write"], aurora["wait"] + aurora["cleanup"] ]
     memsnap_results = [ 0,  memsnap["protect"], memsnap["write"] + memsnap["block"], 0]
+    objsnap_results = [ 0,  objsnap["protect"], objsnap["block"], 0]
 
     aurora_row = list(map(lambda latency: tonum(latency), aurora_results))
     memsnap_row = list(map(lambda latency: tonum(latency), memsnap_results))
+    objsnap_row = list(map(lambda latency: tonum(latency), objsnap_results))
 
     aurora_row.append(sum(aurora_row))
     memsnap_row.append(sum(memsnap_row))
+    objsnap_row.append(sum(objsnap_row))
 
     for i, desc in enumerate(descriptions):
 
         print(r"{\bf \code{" + str(desc) + "} } & ", end="")
 
+        print(toSI(objsnap_row[i]) + r" & ", end="")
         print(toSI(memsnap_row[i]) + r" & ", end="")
         print(toSI(aurora_row[i]) + r" \\")
 
 def header():
-    print(r"\begin{tabular}{@{} c | c c @{}}")
+    print(r"\begin{tabular}{@{} c | c c c @{}}")
     print(r"\toprule")
-    print(r"&  \multicolumn{2}{c}{Time (us)} \\")
-    print(r"{\bf Operation Call} & {\bf MemSnap} & {\bf Aurora} \\ ")
+    print(r"&  \multicolumn{3}{c}{Time (us)} \\")
+    print(r"{\bf Operation Call} & {\bf Objsnap} & {\bf MemSnap} & {\bf Aurora} \\ ")
     print(r"\midrule")
 
 

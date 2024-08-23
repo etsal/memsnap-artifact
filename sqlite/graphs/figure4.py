@@ -30,10 +30,10 @@ def report_metrics(keys, basenums, slsnums, objnums):
     ax.set_xticks(x + width) 
     ax.set_xticklabels(keys)
 
-    ax.legend(fontsize=6, loc="upper right")
-    ax.set_ylim(ymin=0, ymax=100000)
+    ax.legend(fontsize=18, loc="upper right")
+    ax.set_ylim(ymin=0, ymax=200000)
 
-    fig.set_size_inches(36, 24)
+    fig.set_size_inches(18, 12)
     fig.tight_layout()
     fig.savefig(Path.cwd() / "pgfs" / "figure4.png")
 

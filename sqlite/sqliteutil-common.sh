@@ -213,8 +213,11 @@ sqliteutil_setup_objsnap()
 
 sqliteutil_teardown_objsnap()
 {
+	mount 
 	util_teardown_objsnap $MNT
+	mount
 	util_teardown_ffs $MNT
+	mount
 	mdconfig -u $OBJSNAP_MD_NUM -d >/dev/null 2>/dev/null
 }
 

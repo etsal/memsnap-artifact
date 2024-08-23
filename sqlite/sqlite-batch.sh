@@ -58,7 +58,7 @@ sqlite_walsize()
 	SETUP_FUNC=sqliteutil_no_op
 	TEARDOWN_FUNC=sqlite_slsdb_teardown
     	WAL_ENABLED=0
-	DTRACESCRIPT="$PWD/sqlite-sls.d"
+	DTRACESCRIPT="$PWD/sqlite-obj.d"
     else
 	echo "ERROR: Invalid storage option $STORAGE"
 	exit 1
@@ -104,7 +104,6 @@ done
 
 for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
     for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
-    	    BENCHMARK="fillseqbatch"
 	    sqliteutil_aursetup "sls"
 	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" "SLSFS" 
 	    sqliteutil_aurteardown
@@ -114,7 +113,6 @@ gstripe destroy $CKPTSTRIPE
 
 for BATCH_SIZE in 1 2 4 8 16 32 64 128 256; do
     for BENCHMARK in "fillrandbatch" "fillseqbatch"; do
-    	    BENCHMARK="fillseqbatch"
 	    sqliteutil_setup_zfs
 	    sqlite_walsize "$BATCH_SIZE" "$BENCHMARK" "ZFS"
 	    sqliteutil_teardown_zfs

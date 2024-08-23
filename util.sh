@@ -138,6 +138,10 @@ util_teardown_objsnap()
 	MSNPMNT=$1
 
 	umount "$MSNPMNT/memsnap"
+
+	# Wait for the unmount to finish
+	sleep 3
+
 	kldunload memsnap
 	kldunload objsnap
 }

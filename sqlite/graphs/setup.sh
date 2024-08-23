@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=../data/sqlite-batch-initialrun/
+DIR=../data/sqlite-batch-artifact/
 NAME=$1
 
 rm -r fillseqbatch fillrandbatch tatp

@@ -35,6 +35,10 @@ rocksdb_slsdb()
 	--full_checkpoint=$FULLCHECKPOINT \
 	--ignore_wal=false"
 
+    if [ $CFGNAME = "objsnap" ]; then
+	    DTRACESCRIPT="$PWD/rocksdb-obj.d"
+    fi
+
     rocksutil_runbenchmark "$CONFIG" "$CMDLINE" "$DTRACESCRIPT"
 }
 

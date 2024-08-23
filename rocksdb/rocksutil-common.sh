@@ -88,6 +88,9 @@ rocksutil_objsetup()
 	OBJMNT=$1
 	OBJDISK=$2
 
+	# XXX Merge with the SQLite equivalent?
+	mdconfig -u $OBJSNAP_MD_NUM -a -s $OBJSNAP_MD_SIZE -t "swap"
+	util_setup_ffs $OBJMNT $OBJSNAP_MD_PATH
 	util_setup_objsnap $OBJMNT $OBJDISK
 
 	util_setup_root $OBJMNT
@@ -101,6 +104,9 @@ rocksutil_objteardown()
 	AURMNT=$1
 
 	util_teardown_objsnap $AURMNT
+	util_teardown_ffs $AURMNT
+
+	mdconfig -u $OBJSNAP_MD_NUM -d >/dev/null 2>/dev/null
 }
 
 rocksutil_aursetup()
