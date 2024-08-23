@@ -23,7 +23,7 @@ sqlite_tatp()
 	DTRACESCRIPT="$PWD/sqlite-baseline.d"
     elif [ $STORAGE = "OBJSNAP" ]; then
     	CONFIG="objsnap-$NUM_RECORDS"
-	DTRACESCRIPT="$PWD/sqlite-sls.d"
+	DTRACESCRIPT="$PWD/sqlite-obj.d"
     else
 	echo "ERROR: Invalid storage option $STORAGE"
 	exit 1

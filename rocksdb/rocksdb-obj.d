@@ -26,8 +26,6 @@ sas:::write
     @tavg["pages"] = avg(arg0);
 
     @tavg["block"] = avg(timestamp - self->current);
-    self->current = timestamp;
-
     @tavg["objsnap"] = avg(timestamp - self->start);
 }
 

@@ -26,8 +26,6 @@ sas:::write
     @tavg["pages"] = avg(arg0);
 
     @tavg["block"] = avg(timestamp - self->current);
-    self->current = timestamp;
-
     @tavg["objsnap"] = avg(timestamp - self->start);
 }
 
@@ -36,4 +34,5 @@ END
     printa(@tavg);
     printa(@tcnt);
     printa(@tsum);
+    printf("PID\t\t%d\n", $1);
 }
