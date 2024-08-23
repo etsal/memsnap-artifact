@@ -41,11 +41,8 @@ sqlite_tatp()
 		--wal_size=$WAL_SIZE_PAGES"
     
     BINARY="tatp_sqlite3"
-    if [ $STORAGE = "SLSFS" ]; then 
-	    CMDOPTIONS="$CMDOPTIONS --extension=auroravfs --oid=$OID"
-    elif [ $STORAGE = "OBJSNAP" ]; then 
+    if [ $STORAGE = "OBJSNAP" ]; then
 	    BINARY="objsnap_tatp"
-	    CMDOPTIONS="$CMDOPTIONS --extension=auroravfs --oid=$OID"
     fi
 
     sqliteutil_run_tatp "$CONFIG" "$SETUP_FUNC" "$TEARDOWN_FUNC" "$CMDOPTIONS" "$DTRACESCRIPT" "$BINARY"

@@ -144,12 +144,17 @@ sqliteutil_run_tatp()
 sqliteutil_filecopy()
 {
 	FSMNT=$1
+	CONFIG=$2
 
 	mkdir -p $FSMNT/usr/local/lib
 	mkdir -p $FSMNT/memsnap
 
-	cp auroravfs/auroravfs.so $FSMNT/lib/auroravfs.so
-	cp auroravfs/auroravfs-objsnap.so $FSMNT/lib/auroravfs-objsnap.so
+	VFSSO="auroravfs.so"
+	if [ $CONFIG = "objsnap" ]; then
+		VFSSO="auroravfs-objsnap.so"
+	fi
+
+	cp "auroravfs/$VFSSO" $FSMNT/usr/local/lib/auroravfs.so
 	cp db_bench/db_bench $FSMNT/sbin/db_bench_sqlite3
 	cp db_bench/db_bench_objsnap $FSMNT/sbin/objsnap_sqlite3
 	cp tatp/build/tatp/tatp_sqlite3 $FSMNT/sbin/tatp_sqlite3
@@ -162,7 +167,7 @@ sqliteutil_aursetup()
 
 	util_setup_aurora $AURMNT 
 	util_setup_root $AURMNT
-	sqliteutil_filecopy $AURMNT
+	sqliteutil_filecopy $AURMNT "slsfs"
 
 	echo "Setup done"
 }
@@ -176,7 +181,7 @@ sqliteutil_setup_zfs()
 {
 	util_setup_zfs $MNT $ALLDISKS
 	util_setup_root $MNT
-	sqliteutil_filecopy $MNT
+	sqliteutil_filecopy $MNT "zfs"
 }
 
 sqliteutil_teardown_zfs()
@@ -188,7 +193,7 @@ sqliteutil_setup_ffs()
 {
 	util_setup_ffs $MNT $DISKPATH
 	util_setup_root $MNT
-	sqliteutil_filecopy $MNT
+	sqliteutil_filecopy $MNT "ffs"
 }
 
 sqliteutil_teardown_ffs()
@@ -200,9 +205,10 @@ sqliteutil_setup_objsnap()
 {
 	mdconfig -u $OBJSNAP_MD_NUM -a -s $OBJSNAP_MD_SIZE -t "swap"
 	util_setup_ffs $MNT $OBJSNAP_MD_PATH
-	util_setup_root $MNT
-	sqliteutil_filecopy $MNT
 	util_setup_objsnap $MNT $DISKPATH
+
+	util_setup_root $MNT
+	sqliteutil_filecopy $MNT "objsnap"
 }
 
 sqliteutil_teardown_objsnap()
