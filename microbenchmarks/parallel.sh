@@ -22,7 +22,7 @@ for i in 1 2 `seq 3 3 25`; do
 
 	sinit_objsnap
 	sleep 1
-	cpuset -l 0-23 /parallel-combo $i
+	cpuset -l 0-23 ./parallel-combo $i
 	sleep 1
 	sfini_objsnap
 
