@@ -3,7 +3,7 @@
 . helper.sh
 
 printf "Threads\tMemsnap\tMemsnap w/ Objsnap\tObjsnap\n"
-for i in `seq 1 1 12`; do
+for i in 1 2 `seq 3 3 25`; do
 	printf "%d\t" $i
 
 	printf " & "
@@ -14,7 +14,7 @@ for i in `seq 1 1 12`; do
 
 	sinit
 	sleep 1
-	./parallel-sastrack $i
+	cpuset -l 0-23 ./parallel-sastrack $i
 	sleep 1
 	sfini
 
@@ -22,7 +22,7 @@ for i in `seq 1 1 12`; do
 
 	sinit_objsnap
 	sleep 1
-	./parallel-combo $i
+	cpuset -l 0-23 /parallel-combo $i
 	sleep 1
 	sfini_objsnap
 
@@ -30,7 +30,7 @@ for i in `seq 1 1 12`; do
 
 	sinit_objsnap
 	sleep 1
-	./objsnap $i
+	cpuset -l 0-23 ./objsnap $i
 	sleep 1
 	sfini_objsnap
 
