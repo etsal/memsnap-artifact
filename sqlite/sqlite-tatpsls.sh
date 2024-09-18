@@ -63,19 +63,19 @@ for NUM_RECORDS in 1000 10000 100000 1000000; do
 	sqliteutil_teardown_objsnap
 done
 
-#for NUM_RECORDS in 1000 10000 100000 1000000; do
-#	sqliteutil_aursetup "sls"
-#	sqlite_tatp $NUM_RECORDS "SLSFS" 
-#	sqliteutil_aurteardown
-#done
-#
-#gstripe destroy $CKPTSTRIPE
-#
-#for NUM_RECORDS in 1000 10000 100000 1000000; do
-#	sqliteutil_setup_zfs
-#	sqlite_tatp "$NUM_RECORDS" "ZFS"
-#	sqliteutil_teardown_zfs
-#done
+for NUM_RECORDS in 1000 10000 100000 1000000; do
+	sqliteutil_aursetup "sls"
+	sqlite_tatp $NUM_RECORDS "SLSFS" 
+	sqliteutil_aurteardown
+done
+
+gstripe destroy $CKPTSTRIPE
+
+for NUM_RECORDS in 1000 10000 100000 1000000; do
+	sqliteutil_setup_zfs
+	sqlite_tatp "$NUM_RECORDS" "ZFS"
+	sqliteutil_teardown_zfs
+done
 
 sqliteutil_epilogue "tatpsls-$NAME"
 
