@@ -108,7 +108,7 @@ util_setup_zfs()
 	zfs create benchmark/testmnt
 
 	zfs set mountpoint=$FSMNT benchmark/testmnt
-	zfs set recordsize=64k benchmark
+	zfs set recordsize=4k benchmark
 
 	zfs set sync=standard benchmark
 	zfs set checksum=off benchmark/testmnt
