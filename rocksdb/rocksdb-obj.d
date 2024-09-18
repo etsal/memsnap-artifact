@@ -20,6 +20,46 @@ sas:::protect
     self->current = timestamp;
 }
 
+fbt::allocate_txn_block:entry
+{
+	self->allocate = timestamp;
+}
+
+fbt::allocate_txn_block:return
+{
+	@tavg["allocation"] = avg(timestamp - self->allocate);
+}
+
+fbt::objsnap_io:entry
+{
+	self->firstio = timestamp;
+}
+
+fbt::objsnap_io:return
+{
+	@tavg["firstio"] = avg(timestamp - self->firstio);
+}
+
+fbt::objsnap_wal_log:entry
+{
+	self->wal = timestamp;
+}
+
+fbt::objsnap_wal_log:return
+{
+	@tavg["wal"] = avg(timestamp - self->wal);
+}
+
+fbt::ca_gc:entry
+{
+	self->gc = timestamp;
+}
+
+fbt::ca_gc:return
+{
+	@tavg["gc"] = avg(timestamp - self->gc);
+}
+
 sas:::write
 {
     @tsum["pages-total"] = sum(arg0);
