@@ -3,7 +3,7 @@
 . helper.sh
 
 printf "Threads\tMemsnap\tMemsnap w/ Objsnap\tObjsnap\n"
-for i in 1 2 `seq 3 3 25`; do
+for i in `seq 1 1 24`; do
 	printf "%d\t" $i
 
 	printf " & "
